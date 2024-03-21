@@ -22,14 +22,42 @@ const getProduct =  asyncHanler(async(req, res) => {
 
 })
 // Filtering, sorting & pagination
-const getProducts =  asyncHanler(async(req, res) => {
-    const products = await Product.find()
-    return res.status(200).json({
-        success: products ? true : false,
-        productDatas: products ? products : 'Cannot get products'
-    })
+const getProducts = asyncHanler(async (req, res) => {
+    const queries = {...req.query}
+    const excludeFieds = ['limit','sort','page', 'fields']
+    excludeFieds.forEach(el => delete queries[el])
 
-})
+    let queryString = JSON.stringify(queries)
+    queryString  = queryString.replace(/\b(gte|gt|lt|lte)\b/g, macthedEl => `$${macthedEl}`)
+    const formatedQueries = JSON.parse(queryString)
+
+    // Filtering
+    if (queries?.title) formatedQueries.title = {$regex: queries.title, $options: 'i'}
+    let queryCommand = Product.find(formatedQueries)
+
+    // Sorting
+
+    //acb,efg => [abc,efg] => abc efg
+    if (req.query.sort) {
+        const sortBy = req.query.sort.split(',').join('')
+        queryCommand = queryCommand.sort(sortBy)
+    }
+
+    // Execute query
+    // Số lượng sp thoả mãn điều kiện !== số lượng sp trả về 1 lần gọi API
+    try {
+        const response = await queryCommand.exec(); // Sử dụng async/await để gọi exec()
+        const counts = await Product.countDocuments(formatedQueries); // Sử dụng async/await để đếm số lượng sản phẩm
+        return res.status(200).json({
+            success: response ? true : false,
+            products: response ? response : 'Cannot get products',
+            counts
+        });
+    } catch (err) {
+        throw new Error(err.message);
+    }
+});
+
 const updateProduct =  asyncHanler(async (req, res) => {
     const { pid } = req.params
     if(req.body && req.body.title) req.body.slug = slugify(req.body.title)

@@ -1,3 +1,4 @@
+const { query } = require('express')
 const Product = require('../models/product')
 const asyncHanler = require('express-async-handler')
 const slugify = require('slugify')
@@ -36,27 +37,41 @@ const getProducts = asyncHanler(async (req, res) => {
     let queryCommand = Product.find(formatedQueries)
 
     // Sorting
-
-    //acb,efg => [abc,efg] => abc efg
     if (req.query.sort) {
-        const sortBy = req.query.sort.split(',').join('')
+        const sortBy = req.query.sort.split(',').join(' ')
         queryCommand = queryCommand.sort(sortBy)
     }
 
+    // Fields limiting
+    if (req.query.fields) {
+        const fields = req.query.fields.split(',').join(' ')
+        queryCommand = queryCommand.select(fields)
+    }
+
+    // Pagination
+    // limit: số object lấy về gọi API
+    // skip: 2
+    // 1 2 3 ... 10
+    const page = +req.query.page || 1
+    const limit = +req.query.limit || process.env.LIMIT_PRODUCTS
+    const skip = (page -1) * limit
+    queryCommand.skip(skip).limit(limit)
+
     // Execute query
-    // Số lượng sp thoả mãn điều kiện !== số lượng sp trả về 1 lần gọi API
+    // Số lượng sp thoả mãn điều khiển !== số lượng sp trả về 1 lần gọi API
     try {
-        const response = await queryCommand.exec(); // Sử dụng async/await để gọi exec()
-        const counts = await Product.countDocuments(formatedQueries); // Sử dụng async/await để đếm số lượng sản phẩm
+        const response = await queryCommand.exec(); 
+        const counts = await Product.countDocuments(formatedQueries); 
         return res.status(200).json({
             success: response ? true : false,
+            counts,
             products: response ? response : 'Cannot get products',
-            counts
         });
     } catch (err) {
         throw new Error(err.message);
     }
 });
+
 
 const updateProduct =  asyncHanler(async (req, res) => {
     const { pid } = req.params
@@ -75,12 +90,40 @@ const deleteProduct =  asyncHanler(async (req, res) => {
         deletedProduct: deletedProduct ? deletedProduct : 'Cannot delete product'
     })
 })
+const ratings = asyncHanler(async(req, res) => {
+    const {_id} = req.user
+    const {star, comment, pid} = req.body
+    if (!star || !pid) throw new Error('Missing inputs')
+    const ratingProduct = await Product.findById(pid)
+    const alreadyRating = ratingProduct?.ratings?.find(el => el.postedBy.toString() === _id)
+    // console.log(alreadyRating);
+    if(alreadyRating) {
+        // update star & comment
+        await Product.updateOne({
+            ratings: {$elemMatch: alreadyRating}
+        }, {
+            $set: { "ratings.$.star": star,"ratings.$.comment": comment}
+        }, {new: true})
+    } else {
+        // add start & comment
+        await Product.findByIdAndUpdate(pid, {
+            $push: {ratings: {star, comment, postedBy: _id}}
+        }, {new: true})
+        
+    }
 
+    // Sum ratings
+
+    return res.status(200).json({
+        status: true
+    })
+})
 
 module.exports = {
     createProduct,
     getProduct,
     getProducts,
     updateProduct,
-    deleteProduct
+    deleteProduct,
+    ratings
 }

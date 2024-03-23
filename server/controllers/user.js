@@ -1,9 +1,10 @@
 const User = require('../models/user')
 const asyncHandler = require('express-async-handler')
-const {generateAccessToken, generateRefreshToken} = require('../middlewares/jwt')
+const { generateAccessToken, generateRefreshToken } = require('../middlewares/jwt')
 const jwt = require('jsonwebtoken')
 const sendMail = require('../utils/sendMail')
 const crypto = require('crypto')
+const { pid } = require('process')
 
 const register = asyncHandler(async (req, res) => {
     const { email, password, firstname, lastname } = req.body
@@ -14,7 +15,7 @@ const register = asyncHandler(async (req, res) => {
         })
 
     const user = await User.findOne({ email })
-    if(user) throw new Error('User has existed!')
+    if (user) throw new Error('User has existed!')
     else {
         const newUser = await User.create(req.body)
         return res.status(200).json({
@@ -22,7 +23,7 @@ const register = asyncHandler(async (req, res) => {
             mes: newUser ? 'Register is successfully. Please go login~' : 'Something went wrong'
         })
     }
-    
+
 })
 // Refresh token => Cấp mới access token
 // Access token => Xác thực người dùng, phân quyền người dùng
@@ -34,16 +35,16 @@ const login = asyncHandler(async (req, res) => {
             mes: 'Missing inputs'
         })
     // plain object
-    const response = await User.findOne({email})
+    const response = await User.findOne({ email })
     if (response && await response.isCorrectPassword(password)) {
         // Tách password và role ra khỏi response
-        const { password, role, refreshToken,...userData } = response.toObject()
+        const { password, role, refreshToken, ...userData } = response.toObject()
         // Tạo access token
         const accessToken = generateAccessToken(response._id, role)
         // Tạo refresh token
         const newRefreshToken = generateRefreshToken(response._id)
         // Lưu refresh token vào database
-        await User.findByIdAndUpdate(response._id, { refreshToken: newRefreshToken}, {new:true})
+        await User.findByIdAndUpdate(response._id, { refreshToken: newRefreshToken }, { new: true })
         // Lưu refresh token vào cookie
         res.cookie('refreshToken', newRefreshToken, { httpOnly: true, maxAge: 7 * 24 * 60 * 60 * 1000 })
         return res.status(200).json({
@@ -51,37 +52,37 @@ const login = asyncHandler(async (req, res) => {
             accessToken,
             userData
         })
-    }else{
+    } else {
         throw new Error('Invalid credentials!')
     }
 })
 const getCurrent = asyncHandler(async (req, res) => {
-    const { _id} = req.user
+    const { _id } = req.user
     const user = await User.findById(_id).select('-refreshToken -password -role')
     return res.status(200).json({
         success: user ? true : false,
         rs: user ? user : 'User not found'
     })
 })
-const refreshAccessToken = asyncHandler(async(req, res) => {
+const refreshAccessToken = asyncHandler(async (req, res) => {
     // Lấy token từ cookies
     const cookie = req.cookies
     // Check xem có token hay không 
     if (!cookie && !cookie.refreshToken) throw new Error('No refresh token in cookies')
     // Check token có hợp lệ hay không
     const rs = await jwt.verify(cookie.refreshToken, process.env.JWT_SECRET)
-    const response = await User.findOne({_id: rs._id, refreshToken: cookie.refreshToken})
+    const response = await User.findOne({ _id: rs._id, refreshToken: cookie.refreshToken })
     return res.status(200).json({
         success: response ? true : flase,
         newAccessToken: response ? generateAccessToken(response._id, response.role) : 'Refresh token not matched'
     })
 })
 
-const logout = asyncHandler(async(req, res) => {
+const logout = asyncHandler(async (req, res) => {
     const cookie = req.cookies
     if (!cookie || !cookie.refreshToken) throw new Error('No refresh token in cookies')
     // Xoá refresh token ở db
-    await User.findOneAndDelete({refreshToken: cookie.refreshToken}, {refreshToken: ''}, {new: true})
+    await User.findOneAndDelete({ refreshToken: cookie.refreshToken }, { refreshToken: '' }, { new: true })
     // Xoá refresh token ở cooike trình duyệt
     res.clearCookie('refreshToken', {
         httpOnly: true,
@@ -100,7 +101,7 @@ const logout = asyncHandler(async(req, res) => {
 // Change password
 
 const forgotPassword = asyncHandler(async (req, res) => {
-    const {email} = req.query
+    const { email } = req.query
     if (!email) throw new Error('Missing email')
     const user = await User.findOne({ email })
     if (!user) throw new Error('User not found')
@@ -120,58 +121,93 @@ const forgotPassword = asyncHandler(async (req, res) => {
         rs
     })
 })
-const resetPassword = asyncHandler(async (req,res) => {
-    const {password, token} = req.body
+const resetPassword = asyncHandler(async (req, res) => {
+    const { password, token } = req.body
     if (!password || !token) throw new Error('Missing inputs')
     const passwordResetToken = crypto.createHash('sha256').update(token).digest('hex')
-    const user = await User.findOne({passwordResetToken, passwordResetExpires: {$gt: Date.now()}})
+    const user = await User.findOne({ passwordResetToken, passwordResetExpires: { $gt: Date.now() } })
     if (!user) throw new Error('Invalid reset token')
     user.password = password
-    user.passwordResetToken= undefined
-    user.passwordChangedAt= Date.now()
-    user.passwordResetExpires= undefined
+    user.passwordResetToken = undefined
+    user.passwordChangedAt = Date.now()
+    user.passwordResetExpires = undefined
     await user.save()
     return res.status(200).json({
         success: user ? true : false,
         mes: user ? "Updated password" : 'Something went wrong'
     })
 })
-const getUsers = asyncHandler(async(req, res) => {
+const getUsers = asyncHandler(async (req, res) => {
     const response = await User.find().select('-refreshToken -password -role')
     return res.status(200).json({
         success: response ? true : false,
         users: response
     })
 })
-const deleteUsers = asyncHandler(async(req, res) => {
-    const {_id} = req.query
-    if(!_id) throw new Error('Missing inputs')
+const deleteUsers = asyncHandler(async (req, res) => {
+    const { _id } = req.query
+    if (!_id) throw new Error('Missing inputs')
     const response = await User.findByIdAndDelete(_id)
     return res.status(200).json({
         success: response ? true : false,
         deletedUser: response ? `User width email ${response.email} deleted` : 'No user delete'
     })
 })
-const updateUsers = asyncHandler(async(req, res) => {
-    const {_id} = req.user
-    if(!_id || Object.keys(req.body).length == 0) throw new Error('Missing inputs')
-    const response = await User.findByIdAndUpdate(_id, req.body, {new: true}).select('-password -role -refreshToken')
+const updateUsers = asyncHandler(async (req, res) => {
+    const { _id } = req.user
+    if (!_id || Object.keys(req.body).length == 0) throw new Error('Missing inputs')
+    const response = await User.findByIdAndUpdate(_id, req.body, { new: true }).select('-password -role -refreshToken')
     return res.status(200).json({
         success: response ? true : false,
         updatedUser: response ? response : 'Something went wrong'
     })
 })
-const updateUserByAdmin = asyncHandler(async(req, res) => {
+const updateUserByAdmin = asyncHandler(async (req, res) => {
     const { uid } = req.params
-    if(Object.keys(req.body).length == 0) throw new Error('Missing inputs')
-    const response = await User.findByIdAndUpdate(uid, req.body, {new: true}).select('-password -role -refreshToken')
+    if (Object.keys(req.body).length == 0) throw new Error('Missing inputs')
+    const response = await User.findByIdAndUpdate(uid, req.body, { new: true }).select('-password -role -refreshToken')
     return res.status(200).json({
         success: response ? true : false,
         updatedUser: response ? response : 'Something went wrong'
     })
 })
-
-
+const updateUserAddress = asyncHandler(async (req, res) => {
+    const { _id } = req.user
+    if (!req.body.address) throw new Error('Missing inputs')
+    const response = await User.findByIdAndUpdate(_id, { $push: { address: req.body.address } }, { new: true }).select('-password -role -refreshToken')
+    return res.status(200).json({
+        success: response ? true : false,
+        updatedUser: response ? response : 'Something went wrong'
+    })
+})
+const updateCart = asyncHandler(async (req, res) => {
+    const { _id } = req.user
+    const { pid, quantity, color } = req.body
+    if (!pid || !quantity || !color) throw new Error('Missig inputs')
+    const user = await User.findById(_id).select('cart')
+    const alreadyProduct = user?.cart?.find(el => el.product.toString() === pid)
+    if (alreadyProduct) {
+        if (alreadyProduct.color === color) {
+            const response = await User.updateOne({ cart: { $elemMatch: alreadyProduct } }, { $set: { "cart.$.quantity": quantity } }, { new: true })
+            return res.status(200).json({
+                success: response ? true : false,
+                updatedUser: response ? response : 'Something went wrong'
+            })
+        } else {
+            const response = await User.findByIdAndUpdate(_id, { $push: { cart: { product: pid, quantity, color } } }, { new: true })
+            return res.status(200).json({
+                success: response ? true : false,
+                updatedUser: response ? response : 'Something went wrong'
+            })
+        }
+    } else {
+        const response = await User.findByIdAndUpdate(_id, { $push: { cart: { product: pid, quantity, color } } }, { new: true })
+        return res.status(200).json({
+            success: response ? true : false,
+            updatedUser: response ? response : 'Something went wrong'
+        })
+    }
+})
 module.exports = {
     register,
     login,
@@ -183,6 +219,8 @@ module.exports = {
     getUsers,
     deleteUsers,
     updateUsers,
-    updateUserByAdmin
+    updateUserByAdmin,
+    updateUserAddress,
+    updateCart
 }
 

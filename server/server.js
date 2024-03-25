@@ -13,6 +13,9 @@ app.use(express.urlencoded({ extended: true }))
 dbConnect()
 initRoutes(app)
 
+
+
+
 app.listen(port, () => {
     console.log('Server running on the port: ' + port);
 })    

@@ -11,7 +11,7 @@ module.exports = {
     },
     extend: {
       width: {
-        main: '1220px'
+        main: '1180px'
       },
       backgroundColor: {
         main: '#ee3131'

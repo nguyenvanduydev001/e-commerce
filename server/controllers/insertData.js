@@ -6,26 +6,18 @@ const categoryData = require('../../data/cate_brand')
 const ProductCategory = require('../models/productCategory')
 
 const fn = async (product) => {
-    // Kiểm tra nếu giá không tồn tại hoặc không đúng định dạng
-    if (!product?.price || isNaN(parseFloat(product?.price))) {
-        console.error(`Invalid price for product: ${product?.name}`);
-        return; // Bỏ qua sản phẩm không hợp lệ
-    }
-
-    const timestamp = Date.now(); // Lấy thời gian Unix hiện tại
-    const slug = slugify(product?.name) + '-' + timestamp; // Tạo slug từ tên sản phẩm và thời gian Unix hiện tại
-
     await Product.create({
         title: product?.name,
-        slug: slug,
+        slug: slugify(product?.name) + Math.round(Math.random() * 100) + '',
         description: product?.description,
         brand: product?.brand,
-        price: parseFloat(product?.price.replace(/[^\d.]/g, '')) / 100,
+        price: Math.round(Number(product?.price?.match(/\d/g).join('')) / 100),
         category: product?.category[1],
         quantity: Math.round(Math.random() * 1000),
         sold: Math.round(Math.random() * 100),
         images: product?.images,
-        color: product?.variants?.find(el => el.label === 'Color')?.variants[0]
+        color: product?.variants?.find(el => el.label === 'Color')?.variants[0],
+        thumb: product?.thumb
     });
 };
 

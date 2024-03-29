@@ -41,17 +41,17 @@ const BestSellers = () => {
     }, [activedTab])
     return (
         <div>
-            <div className="flex text-[20px] pb-4 border-b-2 border-main">
+            <div className="flex text-[20px] ml-[-32px]">
                 {tabs.map(el => (
                     <span
                         key={el.id}
-                        className={`font-semibold capitalize px-8 border-r cursor-pointer text-gray-400 ${activedTab === el.id ? 'text-gray-900' : ''}`}
+                        className={`font-semibold uppercase px-8 border-r cursor-pointer text-gray-400 ${activedTab === el.id ? 'text-gray-900' : ''}`}
                         onClick={() => setActivedTab(el.id)}
                     >{el.name}
                     </span>
                 ))}
             </div>
-            <div className="mt-4 mx-[-10px]">
+            <div className="mt-4 mx-[-10px] border-t-2 border-main pt-4">
                 <Slider {...settings}>
                     {products?.map(el => (
                         <Product

@@ -39,7 +39,9 @@ const Product = ({ productData, isNew }) => {
                     <img src={isNew ? label : trending} alt="" className="absolute w-[100px] h-[35px] top-[-0] right-[-0] object-cover" />
                 </div>
                 <div className="flex flex-col gap-1 mt-[15px] items-start w-full">
-                    <span className="flex h-4">{renderStartFromNumber(productData?.totalRatings)}</span>
+                    <span className="flex h-4">{renderStartFromNumber(productData?.totalRatings)?.map((el, index) => (
+                        <span key={index}>{el}</span>
+                    ))}</span>
                     <span className="line-clamp-1">{productData?.title}</span>
                     <span>{`${formatMoney(productData?.price)} VNĐ`}</span>
                 </div>

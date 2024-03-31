@@ -19,7 +19,7 @@ instance.interceptors.response.use(function (response) {
     return response.data;
 }, function (error) {
     // Xử lý lỗi nếu request không thành công
-    return error.data;
+    return error.response.data;
 });
 
 export default instance;

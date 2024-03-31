@@ -58,7 +58,6 @@ const DealDaily = () => {
             clearInterval(idInterval)
         }
     }, [second, minute, hour, expireTime])
-    console.log(dealdaily)
     return (
         <div className="border w-full flex-auto">
             <div className="flex items-center justify-between p-4 w-full">

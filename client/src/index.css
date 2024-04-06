@@ -37,13 +37,13 @@
 }
 
 .image-slider button.slick-next {
-    right: 45px;
+    right: 40px;
     top: 43px;
     z-index: 10;
 }
 
 .image-slider button.slick-prev {
-    left: 1px;
+    left: 0px;
     top: 43px;
     z-index: 10;
 }
@@ -69,4 +69,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+}
+input{
+    appearance: none;
 }

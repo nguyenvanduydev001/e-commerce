@@ -1,10 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { apiGetProduct } from '../../apis';
-import { Breadcrumd, Button, SelectQuantity } from '../../components'
+import { apiGetProduct, apiGetProducts } from '../../apis';
+import { Breadcrumd, Button, SelectQuantity, ProductExtraInfoItem, Productinfomation, CustomSlider } from '../../components'
 import Slider from 'react-slick'
 import ReactImageZoom from 'react-image-zoom';
 import { formatMoney, fotmatPrice, renderStartFromNumber } from '../../utils/helpers'
+import { productExtraInfomation } from '../../utils/contants'
 
 const settings = {
     dots: false,
@@ -19,12 +20,20 @@ const DetailProduct = () => {
     const { pid, title, category } = useParams()
     const [product, setProduct] = useState(null)
     const [quantity, setQuantity] = useState(1)
+    const [relatedProducts, setRelatedProducts] = useState(null)
     const fetchProductData = async () => {
         const response = await apiGetProduct(pid)
         if (response.success) setProduct(response.createProduct)      //productData   //createProduct
     }
+    const fetchProducts = async () => {
+        const response = await apiGetProducts({ category })
+        if (response.success) setRelatedProducts(response.products)      //productData   //createProduct
+    }
     useEffect(() => {
-        if (pid) fetchProductData()
+        if (pid) {
+            fetchProductData()
+            fetchProducts()
+        }
     }, [pid])
 
     const handleQuantity = useCallback((number) => {
@@ -83,21 +92,38 @@ const DetailProduct = () => {
                         {product?.description?.map(el => (<li className='leading-6' key={el}>{el}</li>))}
                     </ul>
                     <div className='flex flex-col gap-8'>
-                        <SelectQuantity
-                            quantity={quantity}
-                            handleQuantity={handleQuantity}
-                            handleChangeQuantity={handleChangeQuantity}
-                        />
+                        <div className='flex items-center gap-4'>
+                            <span className='font-semibold'>Quantity</span>
+                            <SelectQuantity
+                                quantity={quantity}
+                                handleQuantity={handleQuantity}
+                                handleChangeQuantity={handleChangeQuantity}
+                            />
+                        </div>
                         <Button fw>
                             Add to Cart
                         </Button>
                     </div>
                 </div>
-                <div className='border border-green-300 w-1/5'>
-                    information
+                <div className='w-1/5'>
+                    {productExtraInfomation.map(el => (
+                        <ProductExtraInfoItem
+                            key={el.id}
+                            title={el.title}
+                            icon={el.icon}
+                            sub={el.sub}
+                        />
+                    ))}
                 </div>
             </div>
-            <div className='h-[500px] w-full'></div>
+            <div className='w-main m-auto mt-8'>
+                <Productinfomation />
+            </div>
+            <div className='w-main m-auto mt-8'>
+                <h3 className='text-[20px] font-semibold py-[15px] border-b-2 border-main'>OTHER CUSTOMERS ALSO BUY:</h3>
+                <CustomSlider normal={true} products={relatedProducts} />
+            </div>
+            <div className='h-[100px] w-full'></div>
         </div>
     );
 }

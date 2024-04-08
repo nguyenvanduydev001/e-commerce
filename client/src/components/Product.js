@@ -10,7 +10,7 @@ import path from '../utils/path'
 
 const { AiFillEye, AiOutlineMenu, BsFillSuitHeartFill } = icons
 
-const Product = ({ productData, isNew }) => {
+const Product = ({ productData, isNew, normal }) => {
     const [isShowOption, setIsShowOption] = useState(false)
     return (
         <div className="w-full text-base px-[10px]">
@@ -39,7 +39,7 @@ const Product = ({ productData, isNew }) => {
                         alt=""
                         className="w-[274px] h-[274px] object-cover"
                     />
-                    <img src={isNew ? label : trending} alt="" className="absolute w-[100px] h-[35px] top-[-0] right-[-0] object-cover" />
+                    {!normal && <img src={isNew ? label : trending} alt="" className="absolute w-[100px] h-[35px] top-[-0] right-[-0] object-cover" />}
                 </div>
                 <div className="flex flex-col gap-1 mt-[15px] items-start w-full">
                     <span className="flex h-4">{renderStartFromNumber(productData?.totalRatings)?.map((el, index) => (

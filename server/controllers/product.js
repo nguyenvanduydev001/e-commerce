@@ -34,6 +34,7 @@ const getProducts = asyncHanler(async (req, res) => {
 
     // Filtering
     if (queries?.title) formatedQueries.title = { $regex: queries.title, $options: 'i' }
+    if (queries?.category) formatedQueries.category = { $regex: queries.category, $options: 'i' }
     let queryCommand = Product.find(formatedQueries)
 
     // Sorting

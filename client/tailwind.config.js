@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  mode: 'jit',
   content: [
     "./src/**/*.{html,js}",
     "./public/index.html"
@@ -77,6 +78,8 @@ module.exports = {
   },
 
   plugins: [
-    require("@tailwindcss/line-clamp")
+    require("@tailwindcss/line-clamp"),
+    require("@tailwindcss/forms"),
   ],
+
 }

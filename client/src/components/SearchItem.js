@@ -2,7 +2,7 @@ import React, { memo, useEffect, useState } from 'react'
 import icons from '../utils/icons'
 import { colors } from '../utils/contants'
 import { createSearchParams, useNavigate, useParams } from 'react-router-dom'
-import path from '../utils/path'
+import { apiGetProducts } from '../apis'
 
 const { AiOutlineDown } = icons
 
@@ -10,20 +10,47 @@ const SearchItem = ({ name, activeClick, changeActiveFitler, type = 'checkbox' }
     const navigate = useNavigate()
     const { category } = useParams()
     const [selected, setSelected] = useState([])
+    const [price, setPrice] = useState([0, 0])
+    const [bestPrice, setBestPrice] = useState([])
     const handleSelect = (e) => {
         const alreadyEl = selected.find(el => el === e.target.value)
         if (alreadyEl) setSelected(prev => prev.filter(el => el !== e.target.value))
         else setSelected(prev => [...prev, e.target.value])
         changeActiveFitler(null)
     }
+    const fetchBestPriceProduct = async () => {
+        const repsonse = await apiGetProducts({ sort: '-price', limit: 1 })
+        if (repsonse.success) setBestPrice(repsonse.products[0]?.price)
+    }
     useEffect(() => {
-        navigate({
-            pathname: `/${category}`,
-            search: createSearchParams({
-                color: selected
-            }).toString()
-        })
+        if (selected.length > 0) {
+            navigate({
+                pathname: `/${category}`,
+                search: createSearchParams({
+                    color: selected.join(',')
+                }).toString()
+            })
+        } else {
+            navigate(`/${category}`)
+        }
     }, [selected])
+    useEffect(() => {
+        if (type === 'input') fetchBestPriceProduct()
+    }, [type])
+    useEffect(() => {
+        console.log(price)
+        // const validPrice = price.filter(el => +el > 0)
+
+        // if (price.from > 0) {
+        //     navigate({
+        //         pathname: `/${category}`,
+        //         search: createSearchParams(price).toString()
+        //     })
+        // } else {
+        //     navigate(`/${category}`)
+        // }
+
+    }, [price])
     return (
         <div
             className='p-3 cursor-pointer text-gray-500 text-xs gap-6 relative border border-gray-800 flex justify-between items-center'
@@ -54,6 +81,37 @@ const SearchItem = ({ name, activeClick, changeActiveFitler, type = 'checkbox' }
                                 <label className='capitalize text-gray-700' htmlFor={el}>{el}</label>
                             </div>
                         ))}
+                    </div>
+                </div>}
+                {type === 'input' && <div onClick={e => e.stopPropagation()}>
+                    <div className='p-4 items-center flex justify-between gap-8 border-b'>
+                        <span className='whitespace-nowrap'>{`The highest price is ${Number(bestPrice).toLocaleString()} VND`}</span>
+                        <span onClick={e => {
+                            e.stopPropagation()
+                            setSelected([])
+                        }} className='underline cursor-pointer hover:text-main'>Reset</span>
+                    </div>
+                    <div className='flex items-center p-2 gap-2'>
+                        <div className='flex items-center gap-2'>
+                            <label htmlFor="from">From</label>
+                            <input
+                                className='form -input'
+                                type="number"
+                                id='from'
+                                value={price[0]}
+                                onChange={e => setPrice(prev => prev.map((el, index) => index === 0 ? e.target.value : el))}
+                            />
+                        </div>
+                        <div className='flex items-center gap-2'>
+                            <label htmlFor="from">From</label>
+                            <input
+                                className='form -input'
+                                type="number"
+                                id='from'
+                                value={price[1]}
+                                onChange={e => setPrice(prev => prev.map((el, index) => index === 1 ? e.target.value : el))}
+                            />
+                        </div>
                     </div>
                 </div>}
             </div>}

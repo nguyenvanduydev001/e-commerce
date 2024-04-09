@@ -1,4 +1,4 @@
-const { query } = require('express')
+const { query, response } = require('express')
 const Product = require('../models/product')
 const asyncHanler = require('express-async-handler')
 const slugify = require('slugify')
@@ -28,15 +28,22 @@ const getProducts = asyncHanler(async (req, res) => {
     const excludeFieds = ['limit', 'sort', 'page', 'fields']
     excludeFieds.forEach(el => delete queries[el])
 
+    // Format lại các operators cho đúng cú pháp mongoose
     let queryString = JSON.stringify(queries)
     queryString = queryString.replace(/\b(gte|gt|lt|lte)\b/g, macthedEl => `$${macthedEl}`)
-    const formatedQueries = JSON.parse(queryString)
-
+    let formatedQueries = JSON.parse(queryString)
+    let colorQueryObject = {}
     // Filtering
     if (queries?.title) formatedQueries.title = { $regex: queries.title, $options: 'i' }
     if (queries?.category) formatedQueries.category = { $regex: queries.category, $options: 'i' }
-    if (queries?.color) formatedQueries.color = { $regex: queries.color, $options: 'i' }
-    let queryCommand = Product.find(formatedQueries)
+    if (queries?.color) {
+        delete formatedQueries.color
+        const colorArr = queries.color?.split(',')
+        const colorQuery = colorArr.map(el => ({ color: { $regex: el, $options: 'i' } }))
+        colorQueryObject = { $or: colorQuery }
+    }
+    const q = { ...colorQueryObject, ...formatedQueries }
+    let queryCommand = Product.find(q)
 
     // Sorting
     if (req.query.sort) {
@@ -51,19 +58,14 @@ const getProducts = asyncHanler(async (req, res) => {
     }
 
     // Pagination
-    // limit: số object lấy về gọi API
-    // skip: 2
-    // 1 2 3 ... 10
     const page = +req.query.page || 1
     const limit = +req.query.limit || process.env.LIMIT_PRODUCTS
     const skip = (page - 1) * limit
     queryCommand.skip(skip).limit(limit)
 
-    // Execute query
-    // Số lượng sp thoả mãn điều khiển !== số lượng sp trả về 1 lần gọi API
     try {
         const response = await queryCommand.exec();
-        const counts = await Product.countDocuments(formatedQueries);
+        const counts = await Product.countDocuments(q);
         return res.status(200).json({
             success: response ? true : false,
             counts,
@@ -73,6 +75,7 @@ const getProducts = asyncHanler(async (req, res) => {
         throw new Error(err.message);
     }
 });
+
 
 
 const updateProduct = asyncHanler(async (req, res) => {

@@ -4,10 +4,15 @@ const useDebounce = (value, ms) => {
 
     const [decounceValue, setDecounceValue] = useState('')
     useEffect(() => {
-        setTimeout(() => {
+
+        const setTimeOutId = setTimeout(() => {
             setDecounceValue(value)
         }, ms)
-    })
+
+        return () => {
+            clearTimeout(setTimeOutId)
+        }
+    }, [value, ms])
     return decounceValue
 }
 

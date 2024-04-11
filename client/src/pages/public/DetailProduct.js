@@ -19,11 +19,15 @@ const DetailProduct = () => {
 
     const { pid, title, category } = useParams()
     const [product, setProduct] = useState(null)
+    const [currentImage, setCurrentImage] = useState(null)
     const [quantity, setQuantity] = useState(1)
     const [relatedProducts, setRelatedProducts] = useState(null)
     const fetchProductData = async () => {
         const response = await apiGetProduct(pid)
-        if (response.success) setProduct(response.createProduct)      //productData   //createProduct
+        if (response.success) {
+            setProduct(response.createProduct)      //productData   //createProduct
+            setCurrentImage(response.createProduct?.thumb)
+        }
     }
     const fetchProducts = async () => {
         const response = await apiGetProducts({ category })
@@ -34,6 +38,7 @@ const DetailProduct = () => {
             fetchProductData()
             fetchProducts()
         }
+        window.scrollTo(0, 0)
     }, [pid])
 
     const handleQuantity = useCallback((number) => {
@@ -48,6 +53,12 @@ const DetailProduct = () => {
         if (flag === 'minus') setQuantity(prev => +prev - 1)
         if (flag === 'plus') setQuantity(prev => +prev + 1)
     }, [quantity])
+
+    const handleClickImage = (e, el) => {
+        e.stopPropagation()
+        setCurrentImage(el)
+    }
+
     return (
         <div className='w-full'>
             <div className='h-[81px] flex justify-center items-center bg-gray-100'>
@@ -65,15 +76,15 @@ const DetailProduct = () => {
                                 width: 458,
                                 height: 458,
                                 zoomWidth: 400,
-                                img: product?.images // Sử dụng ảnh đầu tiên trong danh sách ảnh
+                                img: currentImage // Sử dụng ảnh đầu tiên trong danh sách ảnh
                             }} />
                         )}
                     </div>
                     <div className='w-[458px]'>
                         <Slider className='image-slider' {...settings}>
                             {product?.images?.map(el => (
-                                <div className='flex w-full gap-2' key={el}>
-                                    <img src={el} alt='sub-product' className='h-[143px] w-[143px] border object-cover' />
+                                <div className='flex-1' key={el}>
+                                    <img onClick={e => handleClickImage(e, el)} src={el} alt='sub-product' className='h-[143px] w-[143px] cursor-pointer border object-cover' />
                                 </div>
                             ))}
                         </Slider>
@@ -82,11 +93,11 @@ const DetailProduct = () => {
                 <div className='w-2/5 pr-[24px] flex flex-col gap-4'>
                     <div className='flex items-center justify-between'>
                         <h2 className='text-[30px] font-semibold'>{`${formatMoney(fotmatPrice(product?.price))} VNĐ`}</h2>
-                        <span className='text-sm text-main'>{`Kho: ${product?.quantity}`}</span>
+                        <span className='text-sm text-main'>{`In stock: ${product?.quantity}`}</span>
                     </div>
                     <div className='flex items-center gap-1'>
                         {renderStartFromNumber(product?.totalRatings)?.map((el, index) => (<span key={index}>{el}</span>))}
-                        <span className='text-sm text-main italic'>{`(Đã bán: ${product?.sold} cái)`}</span>
+                        <span className='text-sm text-main italic'>{`(Sold: ${product?.sold} pieces)`}</span>
                     </div>
                     <ul className='text-sm list-square text-gray-500 pl-4'>
                         {product?.description?.map(el => (<li className='leading-6' key={el}>{el}</li>))}
@@ -117,7 +128,7 @@ const DetailProduct = () => {
                 </div>
             </div>
             <div className='w-main m-auto mt-8'>
-                <Productinfomation />
+                <Productinfomation totalRatings={product.totalRatings} totalCount={18} />
             </div>
             <div className='w-main m-auto mt-8'>
                 <h3 className='text-[20px] font-semibold py-[15px] border-b-2 border-main'>OTHER CUSTOMERS ALSO BUY:</h3>

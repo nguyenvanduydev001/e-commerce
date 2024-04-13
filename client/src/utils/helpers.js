@@ -54,3 +54,8 @@ export const validate = (payload, setInvalidFields) => {
 };
 
 export const fotmatPrice = number => Math.round(number / 1000) * 1000
+
+export const generateRange = (start, end) => {
+    const length = end + 1 - start
+    return Array.from({ length }, (_, index) => start + index)
+}

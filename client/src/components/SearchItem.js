@@ -1,7 +1,7 @@
 import React, { memo, useEffect, useState } from 'react'
 import icons from '../utils/icons'
 import { colors } from '../utils/contants'
-import { createSearchParams, useNavigate, useParams } from 'react-router-dom'
+import { createSearchParams, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import useDebounce from '../hooks/useDebounce'
 import { apiGetProducts } from '../apis'
 
@@ -11,6 +11,7 @@ const SearchItem = ({ name, activeClick, changeActiveFitler, type = 'checkbox' }
     const navigate = useNavigate()
     const { category } = useParams()
     const [selected, setSelected] = useState([])
+    const [params] = useSearchParams()
     const [price, setPrice] = useState({
         from: '',
         to: ''
@@ -27,36 +28,45 @@ const SearchItem = ({ name, activeClick, changeActiveFitler, type = 'checkbox' }
         if (repsonse.success) setBestPrice(repsonse.products[0]?.price)
     }
     useEffect(() => {
+        let param = []
+        for (let i of params.entries()) param.push(i)
+        const queries = {}
+        for (let i of param) queries[i[0]] = i[1]
         if (selected.length > 0) {
-            navigate({
-                pathname: `/${category}`,
-                search: createSearchParams({
-                    color: selected.join(',')
-                }).toString()
-            })
-        } else {
-            navigate(`/${category}`)
-        }
+            queries.color = selected.join(',')
+            queries.page = 1
+        } else delete queries.color
+        navigate({
+            pathname: `/${category}`,
+            search: createSearchParams(queries).toString()
+        })
     }, [selected])
     useEffect(() => {
         if (type === 'input') fetchBestPriceProduct()
     }, [type])
 
     useEffect(() => {
-        if (price.from > price.to) alert('From price cannot greater than to price')
+        if (price.from && price.to && price.from > price.to) alert('From price cannot greater than to price')
     }, [price])
 
     const deboucePriceFrom = useDebounce(price.from, 500)
     const deboucePriceTo = useDebounce(price.to, 500)
     useEffect(() => {
-        const data = {}
-        if (Number(price.from) > 0) data.from = price.from
-        if (Number(price.to) > 0) data.to = price.to
+        let param = []
+        for (let i of params.entries()) param.push(i)
+        const queries = {}
+        for (let i of param) queries[i[0]] = i[1]
+        if (Number(price.from) > 0) queries.from = price.from
+        else delete queries.from
+        if (Number(price.to) > 0) queries.to = price.to
+        else delete queries.to
+        queries.page = 1
         navigate({
             pathname: `/${category}`,
-            search: createSearchParams(data).toString()
+            search: createSearchParams(queries).toString()
         })
     }, [deboucePriceFrom, deboucePriceTo])
+
     return (
         <div
             className='p-3 cursor-pointer text-gray-500 text-xs gap-6 relative border border-gray-800 flex justify-between items-center'
@@ -71,6 +81,7 @@ const SearchItem = ({ name, activeClick, changeActiveFitler, type = 'checkbox' }
                         <span onClick={e => {
                             e.stopPropagation()
                             setSelected([])
+                            changeActiveFitler(null)
                         }} className='underline cursor-pointer hover:text-main'>Reset</span>
                     </div>
                     <div onClick={el => el.stopPropagation()} className='flex flex-col gap-3 mt-4'>

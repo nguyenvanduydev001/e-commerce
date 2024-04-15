@@ -9,7 +9,21 @@ const path = {
     FAQ: 'faqs',
     DETAIL_PRODUCT_CATEGORY_PID_TITLE: ':category/:pid/:title',
     FINAL_REGISTER: 'finalregister/:status',
-    RESET_PASSWORD: 'reset-password/:token'
+    RESET_PASSWORD: 'reset-password/:token',
+
+
+    // Admin
+    ADMIN: 'admin',
+    DASHBOARD: 'dashboard',
+    MANAGE_USER: 'manage-user',
+    MANAGE_PRODUCTS: 'manage-products',
+    MANAGE_ORTHER: 'manage-order',
+    CREATE_PRODUCTS: 'create-products',
+
+
+    // Number 
+    MEMBER: 'member',
+    PERSONAL: 'personal'
 }
 
 export default path

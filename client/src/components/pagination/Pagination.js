@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react'
-import usePagination from '../hooks/usePagination'
-import { PagiItem } from './'
+import React, { memo, useEffect } from 'react'
+import usePagination from 'hooks/usePagination'
+import { PagiItem } from '../'
 import { useSearchParams } from 'react-router-dom'
 
 const Pagination = ({ totalCount }) => {
@@ -30,4 +30,4 @@ const Pagination = ({ totalCount }) => {
     )
 }
 
-export default Pagination
+export default memo(Pagination)

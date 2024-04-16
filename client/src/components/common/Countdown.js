@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 
 const Countdown = ({ unit, number }) => {
     return (
@@ -9,4 +9,4 @@ const Countdown = ({ unit, number }) => {
     )
 }
 
-export default Countdown
+export default memo(Countdown)

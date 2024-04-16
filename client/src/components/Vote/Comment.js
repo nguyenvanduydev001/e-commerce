@@ -1,7 +1,8 @@
-import React from 'react'
-import avatar from '../assets/avatarDefault.png'
+import React, { memo } from 'react'
+// import avatar from '../assets/avatarDefault.png'
+import avatar from 'assets/avatarDefault.png'
 import moment from 'moment'
-import { renderStartFromNumber } from '../utils/helpers'
+import { renderStartFromNumber } from '../../utils/helpers'
 const Comment = ({ image = avatar, name = 'Anonymous', updateAt, comment, star }) => {
     return (
         <div className='flex gap-4'>
@@ -32,4 +33,4 @@ const Comment = ({ image = avatar, name = 'Anonymous', updateAt, comment, star }
     )
 }
 
-export default Comment
+export default memo(Comment)

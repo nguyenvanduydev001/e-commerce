@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import { formatMoney } from '../utils/helpers'
-import label from '../assets/new.png'
-import trending from '../assets/trending.png'
-import { renderStartFromNumber } from '../utils/helpers'
-import { SelectOption } from './'
-import icons from '../utils/icons'
+import React, { memo, useState } from "react";
+import { formatMoney } from 'utils/helpers'
+import label from 'assets/new.png'
+import trending from 'assets/trending.png'
+import { renderStartFromNumber } from 'utils/helpers'
+import { SelectOption } from '../'
+import icons from 'utils/icons'
 import { Link } from "react-router-dom";
-import path from '../utils/path'
+import path from 'utils/path'
 
 const { AiFillEye, AiOutlineMenu, BsFillSuitHeartFill } = icons
 
@@ -53,4 +53,4 @@ const Product = ({ productData, isNew, normal }) => {
     )
 }
 
-export default Product
+export default memo(Product)

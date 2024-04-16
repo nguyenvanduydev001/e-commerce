@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react'
-import { ProductCard } from './';
-import { apiGetProducts } from '../apis'
-import banner from '../assets/banner1.jpg'
-import bannerleft from '../assets/banner-left.jpg'
-import bannertop from '../assets/banner-top.jpg'
-import bannerbottom from '../assets/banner-bottom.jpg'
-import bannerright from '../assets/banner-right.jpg'
+import React, { useState, useEffect, memo } from 'react'
+import { ProductCard } from '../';
+import { apiGetProducts } from 'apis'
+import bannerleft from 'assets/banner-left.jpg'
+import bannertop from 'assets/banner-top.jpg'
+import bannerbottom from 'assets/banner-bottom.jpg'
+import bannerright from 'assets/banner-right.jpg'
 
 const FeatureProducts = () => {
     const [products, setProducts] = useState(null)
@@ -54,4 +53,4 @@ const FeatureProducts = () => {
     )
 }
 
-export default FeatureProducts
+export default memo(FeatureProducts)

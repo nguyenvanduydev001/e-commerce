@@ -50,7 +50,7 @@ function App() {
         </Route>
         <Route path={path.ADMIN} element={<AdminLayout />}>
           <Route path={path.DASHBOARD} element={<Dashboard />} />
-          <Route path={path.MANAGE_ORTHER} element={<ManageOrder />} />
+          <Route path={path.MANAGE_ORDER} element={<ManageOrder />} />
           <Route path={path.MANAGE_PRODUCTS} element={<ManageProducts />} />
           <Route path={path.MANAGE_USER} element={<ManageUser />} />
           <Route path={path.CREATE_PRODUCTS} element={<CreateProducts />} />

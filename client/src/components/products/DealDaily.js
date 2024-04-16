@@ -1,8 +1,8 @@
 import React, { useState, useEffect, memo } from "react";
-import icons from '../utils/icons'
-import { apiGetProducts } from '../apis/product'
-import { renderStartFromNumber, formatMoney, secondsToHms } from '../utils/helpers'
-import { Countdown } from './'
+import icons from 'utils/icons'
+import { apiGetProducts } from 'apis/product'
+import { renderStartFromNumber, formatMoney, secondsToHms } from 'utils/helpers'
+import { Countdown } from '../'
 import moment from 'moment'
 const { AiFillStar, AiOutlineMenu } = icons
 

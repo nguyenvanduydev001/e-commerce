@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import useBreadcrumbs from "use-react-router-breadcrumbs";
 import { Link } from "react-router-dom";
 import { IoIosArrowForward } from 'react-icons/io'
@@ -22,4 +22,4 @@ const Breadcrumd = ({ title, category }) => {
     )
 }
 
-export default Breadcrumd
+export default memo(Breadcrumd)

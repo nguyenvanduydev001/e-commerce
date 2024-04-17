@@ -6,6 +6,8 @@ const sendMail = require('../utils/sendMail')
 const crypto = require('crypto')
 const { pid } = require('process')
 const makeToken = require('uniqid')
+const { users } = require('../utils/constant')
+
 
 // const register = asyncHandler(async (req, res) => {
 //     const { email, password, firstname, lastname } = req.body
@@ -181,12 +183,44 @@ const resetPassword = asyncHandler(async (req, res) => {
     })
 })
 const getUsers = asyncHandler(async (req, res) => {
-    const response = await User.find().select('-refreshToken -password -role')
-    return res.status(200).json({
-        success: response ? true : false,
-        users: response
-    })
-})
+    const queries = { ...req.query };
+    const excludeFields = ['limit', 'sort', 'page', 'fields'];
+    excludeFields.forEach((el) => delete queries[el]);
+
+    let queryString = JSON.stringify(queries);
+    queryString = queryString.replace(/\b(gte|gt|lt|lte)\b/g, (matchedEl) => `$${matchedEl}`);
+    let formattedQueries = JSON.parse(queryString);
+    if (queries?.name) formattedQueries.name = { $regex: queries.name, $options: 'i' };
+
+    let queryCommand = User.find(formattedQueries);
+
+    if (req.query.sort) {
+        const sortBy = req.query.sort.split(',').join(' ');
+        queryCommand = queryCommand.sort(sortBy);
+    }
+
+    if (req.query.fields) {
+        const fields = req.query.fields.split(',').join(' ');
+        queryCommand = queryCommand.select(fields);
+    }
+
+    const page = +req.query.page || 1;
+    const limit = +req.query.limit || process.env.LIMIT_PRODUCTS;
+    const skip = (page - 1) * limit;
+
+    try {
+        const response = await queryCommand.skip(skip).limit(limit);
+        const counts = await User.find(formattedQueries).countDocuments();
+        return res.status(200).json({
+            success: response ? true : false,
+            counts,
+            users: response ? response : 'Cannot get products'
+        });
+    } catch (err) {
+        return res.status(500).json({ success: false, message: err.message });
+    }
+});
+
 const deleteUsers = asyncHandler(async (req, res) => {
     const { _id } = req.query
     if (!_id) throw new Error('Missing inputs')
@@ -251,6 +285,13 @@ const updateCart = asyncHandler(async (req, res) => {
         })
     }
 })
+const createUsers = asyncHandler(async (req, res) => {
+    const response = await User.create(users)
+    return res.status(200).json({
+        success: response ? true : false,
+        users: response ? response : 'Some thing went wrong'
+    })
+})
 module.exports = {
     register,
     login,
@@ -265,6 +306,7 @@ module.exports = {
     updateUserByAdmin,
     updateUserAddress,
     updateCart,
-    finalRegister
+    finalRegister,
+    createUsers
 }
 

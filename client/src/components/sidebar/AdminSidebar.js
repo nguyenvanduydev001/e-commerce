@@ -15,7 +15,6 @@ const AdminSidebar = () => {
         else setActived(prev => [...prev, tabID])
     }
 
-    console.log(actived)
     return (
         <div className='py-4 bg-gray-100 h-full'>
             <div className='flex flex-col items-center p-4 justify-center gap-2'>

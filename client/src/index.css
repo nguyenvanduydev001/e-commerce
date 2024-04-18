@@ -91,3 +91,8 @@ input {
 .w500 {
   width: 500px;
 }
+
+.edit-input {
+  width: 100%;
+  box-sizing: border-box;
+}

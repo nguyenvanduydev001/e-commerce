@@ -11,7 +11,7 @@ const InputFrom = ({ label, disabled, register, errors, id, validate, type = 'te
                 {...register(id, validate)}
                 disabled={disabled}
                 placeholder={placeholder}
-                className={clsx('form-input', fullWidth && 'w-full')}
+                className={clsx('form-input my-auto', fullWidth && 'w-full')}
                 defaultValue={defaultValue}
             />
             {errors[id] && <small className='text-xs text-red-500'>{errors[id]?.message}</small>}

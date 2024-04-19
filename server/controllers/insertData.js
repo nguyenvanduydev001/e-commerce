@@ -39,7 +39,7 @@ const fn2 = async (cate) => {
 }
 const insertCategpry = asyncHandler(async (req, res) => {
     // const dataArray = data["[object Object]"]; // Truy cập vào mảng các sản phẩm
-    console.log(categoryData)
+    // console.log(categoryData)
     const promises = [];
     for (let cate of categoryData) promises.push(fn2(cate)); // Lặp qua từng sản phẩm
     await Promise.all(promises);

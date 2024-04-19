@@ -1,16 +1,33 @@
-import React from 'react'
-import { InputFrom, Select, Button } from 'components'
+import React, { useCallback, useState, } from 'react'
+import { InputFrom, Select, Button, MarkdownEditor } from 'components'
 import { useForm } from 'react-hook-form'
 import { useSelector } from 'react-redux'
+import { validate } from 'utils/helpers'
 
 const CreateProducts = () => {
     const { categories } = useSelector(state => state.app)
     const { register, formState: { errors }, reset, handleSubmit, watch } = useForm()
-    const handleCreateProduct = (data) => {
-        if (data.category) data.category = categories?.find(el => el._id === data.category)?.title
-        console.log(data)
-    }
 
+    const [payload, setPayload] = useState({
+        description: ''
+    })
+    const [invalidFields, setInvalidFields] = useState([])
+    const changeValue = useCallback((e) => {
+        setPayload(e)
+    }, [payload])
+
+    const handleCreateProduct = (data) => {
+        const invalids = validate(payload, setInvalidFields)
+        if (invalids === 0) {
+            if (data.category) data.category = categories?.find(el => el._id === data.category)?.title
+            const finalPayload = { ...data, ...payload }
+            console.log(finalPayload)
+            const formData = new FormData()
+            for (let i of Object.entries(finalPayload)) formData.append(i[0], i[1])
+
+
+        }
+    }
     return (
         <div className='w-full'>
             <h1 className='h-[75px] flex justify-between items-center text-3xl font-bold px-4 border-b border-gray-300'>
@@ -34,7 +51,7 @@ const CreateProducts = () => {
                             label='Price'
                             register={register}
                             errors={errors}
-                            id='title'
+                            id='price'
                             validate={{
                                 required: 'Need fill this field'
                             }}
@@ -87,7 +104,35 @@ const CreateProducts = () => {
                             fullWidth
                         />
                     </div>
-                    <Button type='submit'>Create new product</Button>
+                    <MarkdownEditor
+                        name='description'
+                        changeValue={changeValue}
+                        label='Description'
+                        invalidFiedls={invalidFields}
+                        setInvaliFields={setInvalidFields}
+                    />
+                    <div className='flex flex-col gap-2 mt-8'>
+                        <label className='font-semibold' htmlFor="thumb">Upload thumb</label>
+                        <input
+                            type="file"
+                            id="thumb"
+                            {...register('thumb', { required: 'Need fill' })}
+                        />
+                        {errors['thumb'] && <small className='text-xs text-red-500'>{errors['thumb']?.message}</small>}
+                    </div>
+                    <div className='flex flex-col gap-2 mt-8'>
+                        <label className='font-semibold' htmlFor="products">Upload images of product</label>
+                        <input
+                            type="file"
+                            id="products"
+                            multiple
+                            {...register('images', { required: 'Need fill' })}
+                        />
+                        {errors['images'] && <small className='text-xs text-red-500'>{errors['thumb']?.message}</small>}
+                    </div>
+                    <div className='my-6'>
+                        <Button type='submit'>Create new product</Button>
+                    </div>
                 </form>
             </div>
         </div>

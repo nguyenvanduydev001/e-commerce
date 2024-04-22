@@ -4,8 +4,13 @@ const asyncHanler = require('express-async-handler')
 const slugify = require('slugify')
 
 const createProduct = asyncHanler(async (req, res) => {
-    if (Object.keys(req.body).length == 0) throw new Error('Missing inputs')
-    if (req.body && req.body.title) req.body.slug = slugify(req.body.title)
+    const { title, price, description, brand, category, color } = req.body
+    const thumb = req?.files?.thumb[0]?.path
+    const images = req.files?.images?.map(el => el.path)
+    if (!(title && price && description && brand && category && color)) throw new Error('Missing inputs')
+    req.body.slug = slugify(title)
+    if (thumb) req.body.thumb = thumb
+    if (images) req.body.images = images
     const newProduct = await Product.create(req.body)
     return res.status(200).json({
         success: newProduct ? true : false,

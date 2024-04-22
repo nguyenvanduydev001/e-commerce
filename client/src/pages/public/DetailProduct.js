@@ -6,6 +6,7 @@ import Slider from 'react-slick'
 import ReactImageZoom from 'react-image-zoom';
 import { formatMoney, fotmatPrice, renderStartFromNumber } from '../../utils/helpers'
 import { productExtraInfomation } from '../../utils/contants'
+import DOMPurify from 'dompurify';
 
 const settings = {
     dots: false,
@@ -106,7 +107,8 @@ const DetailProduct = () => {
                         <span className='text-sm text-main italic'>{`(Sold: ${product?.sold} pieces)`}</span>
                     </div>
                     <ul className='text-sm list-square text-gray-500 pl-4'>
-                        {product?.description?.map(el => (<li className='leading-6' key={el}>{el}</li>))}
+                        {product?.description?.length > 1 && product?.description?.map(el => (<li className='leading-6' key={el}>{el}</li>))}
+                        {product?.description?.length === 1 && <div className='text-sm' dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(product?.description[0]) }}></div>}
                     </ul>
                     <div className='flex flex-col gap-8'>
                         <div className='flex items-center gap-4'>

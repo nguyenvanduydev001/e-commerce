@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form'
 import { useSelector } from 'react-redux'
 import { validate, getBase64 } from 'utils/helpers'
 import { toast } from 'react-toastify';
-import { RiDeleteBin2Fill } from 'react-icons/ri'
+import { apiCreateProduct } from 'apis'
 
 const CreateProducts = () => {
     const { categories } = useSelector(state => state.app)
@@ -47,7 +47,7 @@ const CreateProducts = () => {
     }, [watch('images')])
 
 
-    const handleCreateProduct = (data) => {
+    const handleCreateProduct = async (data) => {
         const invalids = validate(payload, setInvalidFields)
         if (invalids === 0) {
             if (data.category) data.category = categories?.find(el => el._id === data.category)?.title
@@ -55,17 +55,16 @@ const CreateProducts = () => {
             console.log(finalPayload)
             const formData = new FormData()
             for (let i of Object.entries(finalPayload)) formData.append(i[0], i[1])
-
-
+            if (finalPayload.thumb) formData.append('thumb', finalPayload.thumb[0])
+            if (finalPayload.images) {
+                for (let image of finalPayload.images) formData.append('images', image)
+            }
+            const response = await apiCreateProduct(formData)
+            console.log(response)
         }
     }
-    const handleRemoveImage = (name) => {
-        const files = [...watch('images')]
-        reset({
-            images: files?.filter(el => el.name !== name)
-        })
-        if (preview.images?.some(el => el.name)) setPreview(prev => ({ ...prev, images: prev.images?.filter(el => el.name !== name) }))
-    }
+
+
     return (
         <div className='w-full'>
             <h1 className='h-[75px] flex justify-between items-center text-3xl font-bold px-4 border-b border-gray-300'>
@@ -180,12 +179,12 @@ const CreateProducts = () => {
                                 onMouseLeave={() => setHoverElm(null)}
                             >
                                 <img src={el.path} alt="product" className='w-[200px] object-contain' />
-                                {hoverElm === el.name && <div
+                                {/* {hoverElm === el.name && <div
                                     className='absolute cursor-pointer inset-0 bg-overlay flex items-center justify-center'
                                     onClick={() => handleRemoveImage(el.name)}
                                 >
                                     <RiDeleteBin2Fill size={24} color='white' />
-                                </div>}
+                                </div>} */}
                             </div>
                         ))}
                     </div>}

@@ -76,7 +76,7 @@ const DetailProduct = () => {
             </div>
             <div className='w-main m-auto mt-4 flex'>
                 <div className='flex flex-col gap-4 w-2/5'>
-                    <div className='w-[458px] border object-cover'>
+                    <div className='w-[458px] border flex items-center object-cover'>
                         {product && (
                             <ReactImageZoom {...{
                                 border: 1,
@@ -108,7 +108,7 @@ const DetailProduct = () => {
                     </div>
                     <ul className='text-sm list-square text-gray-500 pl-4'>
                         {product?.description?.length > 1 && product?.description?.map(el => (<li className='leading-6' key={el}>{el}</li>))}
-                        {product?.description?.length === 1 && <div className='text-sm' dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(product?.description[0]) }}></div>}
+                        {product?.description?.length === 1 && <div className='text-sm line-clamp-[10] mb-8' dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(product?.description[0]) }}></div>}
                     </ul>
                     <div className='flex flex-col gap-8'>
                         <div className='flex items-center gap-4'>

@@ -45,7 +45,6 @@ const getProducts = asyncHanler(async (req, res) => {
     queryString = queryString.replace(/\b(gte|gt|lt|lte)\b/g, macthedEl => `$${macthedEl}`)
     let formatedQueries = JSON.parse(queryString)
     let colorQueryObject = {}
-    // Filtering
     if (queries?.title) formatedQueries.title = { $regex: queries.title, $options: 'i' }
     if (queries?.category) formatedQueries.category = { $regex: queries.category, $options: 'i' }
     if (queries?.color) {
@@ -54,8 +53,21 @@ const getProducts = asyncHanler(async (req, res) => {
         const colorQuery = colorArr.map(el => ({ color: { $regex: el, $options: 'i' } }))
         colorQueryObject = { $or: colorQuery }
     }
-    const q = { ...colorQueryObject, ...formatedQueries }
-    let queryCommand = Product.find(q)
+    let queryObject = {}
+    if (queries?.q) {
+        delete formatedQueries.q
+        queryObject = {
+            $or: [
+                { color: { $regex: queries.q, $options: 'i' } },
+                { title: { $regex: queries.q, $options: 'i' } },
+                { category: { $regex: queries.q, $options: 'i' } },
+                { brand: { $regex: queries.q, $options: 'i' } },
+                { description: { $regex: queries.q, $options: 'i' } },
+            ]
+        }
+    }
+    const qr = { ...colorQueryObject, ...formatedQueries, ...queryObject }
+    let queryCommand = Product.find(qr)
 
     // Sorting
     if (req.query.sort) {
@@ -77,7 +89,7 @@ const getProducts = asyncHanler(async (req, res) => {
 
     try {
         const response = await queryCommand.exec();
-        const counts = await Product.countDocuments(q);
+        const counts = await Product.countDocuments(qr);
         return res.status(200).json({
             success: response ? true : false,
             counts,

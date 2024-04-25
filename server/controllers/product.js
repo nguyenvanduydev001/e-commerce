@@ -104,11 +104,14 @@ const getProducts = asyncHanler(async (req, res) => {
 
 const updateProduct = asyncHanler(async (req, res) => {
     const { pid } = req.params
+    const files = req?.files
+    if (files?.thumb) req.body.thumb = files?.thumb[0]?.path
+    if (files?.images) req.body.images = files?.images?.map(el => el.path)
     if (req.body && req.body.title) req.body.slug = slugify(req.body.title)
     const updateProduct = await Product.findByIdAndUpdate(pid, req.body, { new: true })
     return res.status(200).json({
         success: updateProduct ? true : false,
-        updateProduct: updateProduct ? updateProduct : 'Cannot update product'
+        mes: updateProduct ? 'Updated' : 'Cannot update product'
     })
 })
 const deleteProduct = asyncHanler(async (req, res) => {
@@ -116,7 +119,7 @@ const deleteProduct = asyncHanler(async (req, res) => {
     const deletedProduct = await Product.findByIdAndDelete(pid)
     return res.status(200).json({
         success: deletedProduct ? true : false,
-        deletedProduct: deletedProduct ? deletedProduct : 'Cannot delete product'
+        mes: deletedProduct ? 'Delete' : 'Cannot delete product'
     })
 })
 const ratings = asyncHanler(async (req, res) => {

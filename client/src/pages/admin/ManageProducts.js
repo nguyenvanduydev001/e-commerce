@@ -1,11 +1,13 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { InputFrom, Pagination } from 'components'
 import { useForm } from 'react-hook-form'
-import { apiGetProducts } from 'apis/product'
+import { apiGetProducts, apiDeleteProduct } from 'apis/product'
 import moment from 'moment'
 import { useSearchParams, createSearchParams, useNavigate, useLocation } from 'react-router-dom'
 import useDebounce from 'hooks/useDebounce'
 import UpdateProduct from './UpdateProduct'
+import Swal from 'sweetalert2'
+import { toast } from 'react-toastify'
 
 const ManageProducts = () => {
     const navigate = useNavigate()
@@ -45,10 +47,30 @@ const ManageProducts = () => {
         fetchProducts(searchParams)
     }, [params, update])
 
+    const handleDeleteProduct = (pid) => {
+        Swal.fire({
+            title: 'Are you sure',
+            text: 'Are you sure remove this product',
+            icon: 'warning',
+            showCancelButton: true
+        }).then(async (rs) => {
+            if (rs.isConfirmed) {
+                const response = await apiDeleteProduct(pid)
+                if (response.success) toast.success(response.mes)
+                else toast.error(response.mes)
+                render()
+            }
+        })
+    }
+
     return (
         <div className='w-full flex flex-col gap-4 relative'>
             {editProduct && <div className='absolute inset-0 min-h-screen z-50 bg-[#e5e7eb]'>
-                <UpdateProduct editProduct={editProduct} render={render} />
+                <UpdateProduct
+                    editProduct={editProduct}
+                    render={render}
+                    setEditProduct={setEditProduct}
+                />
             </div>}
             <div className='h-[69px] w-full'></div>
             <div className='p-4 border-b w-full bg-[#e5e7eb] flex justify-between items-center border-gray-300 fixed top-0'>
@@ -100,7 +122,7 @@ const ManageProducts = () => {
                             <td className='text-center py-2'>{moment(el.createdAt).format('DD/MM/YYYY')}</td>
                             <td className='text-center py-2'>
                                 <span onClick={() => setEditProduct(el)} className='text-blue-500 hover:underline cursor-pointer px-1'>Edit</span>
-                                <span className='text-blue-500 hover:underline cursor-pointer px-1'>Remove</span>
+                                <span onClick={() => handleDeleteProduct(el._id)} className='text-blue-500 hover:underline cursor-pointer px-1'>Remove</span>
                             </td>
                         </tr>
                     ))}

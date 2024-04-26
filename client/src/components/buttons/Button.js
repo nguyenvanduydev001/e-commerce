@@ -10,6 +10,7 @@ const Button = ({ children, handleOnClick, style, fw, type = 'button' }) => {
             {children}
         </button>
     )
+
 }
 
 export default memo(Button)

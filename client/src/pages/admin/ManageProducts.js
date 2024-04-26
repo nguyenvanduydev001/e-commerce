@@ -1,54 +1,60 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import { CustomizeVarriants, InputFrom, Pagination } from 'components'
-import { useForm } from 'react-hook-form'
-import { apiGetProducts, apiDeleteProduct } from 'apis/product'
-import moment from 'moment'
-import { useSearchParams, createSearchParams, useNavigate, useLocation } from 'react-router-dom'
-import useDebounce from 'hooks/useDebounce'
-import UpdateProduct from './UpdateProduct'
-import Swal from 'sweetalert2'
-import { toast } from 'react-toastify'
-import { BiCustomize, BiEdit } from 'react-icons/bi'
-import { RiDeleteBin6Line } from 'react-icons/ri'
+import React, { useCallback, useEffect, useState } from 'react';
+import { CustomizeVarriants, InputFrom, Pagination } from 'components';
+import { useForm } from 'react-hook-form';
+import { apiGetProducts, apiDeleteProduct } from 'apis/product';
+import moment from 'moment';
+import { useSearchParams, createSearchParams, useNavigate, useLocation } from 'react-router-dom';
+import useDebounce from 'hooks/useDebounce';
+import UpdateProduct from './UpdateProduct';
+import Swal from 'sweetalert2';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { BiCustomize, BiEdit } from 'react-icons/bi';
+import { RiDeleteBin6Line } from 'react-icons/ri';
+
+
 
 const ManageProducts = () => {
-    const navigate = useNavigate()
-    const location = useLocation()
-    const [params] = useSearchParams()
-    const { register, formState: { errors }, watch } = useForm()
-    const [products, setProducts] = useState(null)
-    const [counts, setCounts] = useState(0)
-    const [editProduct, setEditProduct] = useState(null)
-    const [update, setUpdate] = useState(false)
-    const [customizeVarriant, setCustomizeVarriant] = useState(null)
+    const navigate = useNavigate();
+    const location = useLocation();
+    const [params] = useSearchParams();
+    const { register, formState: { errors }, watch } = useForm();
+    const [products, setProducts] = useState(null);
+    const [counts, setCounts] = useState(0);
+    const [editProduct, setEditProduct] = useState(null);
+    const [update, setUpdate] = useState(false);
+    const [customizeVarriant, setCustomizeVarriant] = useState(null);
 
     const render = useCallback(() => {
-        setUpdate(!update)
-    })
+        setUpdate(!update);
+    }, [update]);
 
     const fetchProducts = async (params) => {
-        const response = await apiGetProducts({ ...params, limit: process.env.REACT_APP_LIMIT })
+        const response = await apiGetProducts({ ...params, limit: process.env.REACT_APP_LIMIT });
         if (response.success) {
-            setCounts(response.counts)
-            setProducts(response.products)
+            setCounts(response.counts);
+            setProducts(response.products);
         }
-    }
-    const queryDecounce = useDebounce(watch('q'), 800)
+    };
+
+    const queryDecounce = useDebounce(watch('q'), 800);
     useEffect(() => {
         if (queryDecounce) {
             navigate({
                 pathname: location.pathname,
                 search: createSearchParams({ q: queryDecounce }).toString()
-            })
-        } else navigate({
-            pathname: location.pathname,
-        })
-    }, [queryDecounce])
+            });
+        } else {
+            navigate({
+                pathname: location.pathname,
+            });
+        }
+    }, [queryDecounce]);
 
     useEffect(() => {
-        const searchParams = Object.fromEntries([...params])
-        fetchProducts(searchParams)
-    }, [params, update])
+        const searchParams = Object.fromEntries([...params]);
+        fetchProducts(searchParams);
+    }, [params, update]);
 
     const handleDeleteProduct = (pid) => {
         Swal.fire({
@@ -58,13 +64,13 @@ const ManageProducts = () => {
             showCancelButton: true
         }).then(async (rs) => {
             if (rs.isConfirmed) {
-                const response = await apiDeleteProduct(pid)
-                if (response.success) toast.success(response.mes)
-                else toast.error(response.mes)
-                render()
+                const response = await apiDeleteProduct(pid);
+                if (response.success) toast.success(response.mes);
+                else toast.error(response.mes);
+                render();
             }
-        })
-    }
+        });
+    };
 
     return (
         <div className='w-full flex flex-col gap-4 relative'>
@@ -110,6 +116,7 @@ const ManageProducts = () => {
                         <th className='text-center py-2'>Sold</th>
                         <th className='text-center py-2'>Color</th>
                         <th className='text-center py-2'>Ratings</th>
+                        <th className='text-center py-2'>Varriants</th>
                         <th className='text-center py-2'>UpdateAt</th>
                         <th className='text-center py-2'>Actions</th>
                     </tr>
@@ -129,6 +136,7 @@ const ManageProducts = () => {
                             <td className='text-center py-2'>{el.sold}</td>
                             <td className='text-center py-2'>{el.color}</td>
                             <td className='text-center py-2'>{el.totalRatings}</td>
+                            <td className='text-center py-2'>{el?.varriants?.length || 0}</td>
                             <td className='text-center py-2'>{moment(el.createdAt).format('DD/MM/YYYY')}</td>
                             <td className='text-center py-2 flex mt-3'>
                                 <span onClick={() => setEditProduct(el)} className='text-blue-500 hover:text-orange-500 hover:underline 
@@ -146,7 +154,7 @@ const ManageProducts = () => {
                 <Pagination totalCount={counts} />
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default ManageProducts
+export default ManageProducts;

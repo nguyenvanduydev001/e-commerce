@@ -1,8 +1,8 @@
+import React, { memo, useEffect, useState } from "react";
 import { apiAddVarriant } from "apis";
 import Button from "components/buttons/Button";
 import Loading from "components/common/Loading";
 import InputFrom from "components/inputs/InputFrom";
-import React, { memo, useEffect, useState } from "react";
 import { useForm } from 'react-hook-form'
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
@@ -35,7 +35,11 @@ const CustomizeVarriants = ({ customizeVarriant, setCustomizeVarriant, render })
             dispatch(showModal({ isShowModal: true, modalChildren: <Loading /> }))
             const response = await apiAddVarriant(formData, customizeVarriant._id)
             dispatch(showModal({ isShowModal: false, modalChildren: null }))
-            console.log(response)
+            if (response.success) {
+                toast.success(response.mes)
+                reset()
+                setPreview({ thumb: '', images: [] })
+            } else toast.error(response.mes)
         }
     }
     const handlePreviewThumb = async (file) => {
@@ -72,7 +76,7 @@ const CustomizeVarriants = ({ customizeVarriant, setCustomizeVarriant, render })
                     className='text-main hover:underline cursor-pointer'
                     onClick={() => setCustomizeVarriant(null)}
                 >
-                    Cancel
+                    Bank
                 </span>
             </div>
             <form onSubmit={handleSubmit(handleAddVarriant)} className="p-4 w-full flex gap-4 flex-col">

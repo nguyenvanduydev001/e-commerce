@@ -153,7 +153,7 @@ const ratings = asyncHanler(async (req, res) => {
     await updatedProduct.save()
 
     return res.status(200).json({
-        status: true,
+        success: true,
         updatedProduct
     })
 })
@@ -162,7 +162,7 @@ const uploadImagesProduct = asyncHanler(async (req, res) => {
     if (!req.files) throw new Error('Missing inputs')
     const response = await Product.findByIdAndUpdate(pid, { $push: { images: { $each: req.files.map(el => el.path) } } }, { new: true })
     return res.status(200).json({
-        status: response ? true : false,
+        success: response ? true : false,
         updatedProduct: response ? response : 'Cannot upload images product'
     })
 })
@@ -178,8 +178,8 @@ const addVarriant = asyncHanler(async (req, res) => {
         }
     }, { new: true })
     return res.status(200).json({
-        status: response ? true : false,
-        response: response ? response : 'Cannot upload images product'
+        success: response ? true : false,
+        mes: response ? 'Added varriant' : 'Cannot upload images product'
     })
 })
 module.exports = {

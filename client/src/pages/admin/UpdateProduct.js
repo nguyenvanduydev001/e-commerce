@@ -28,7 +28,7 @@ const UpdateProduct = ({ editProduct, render, setEditProduct }) => {
             category: editProduct?.category || '',
             brand: editProduct?.brand?.toLowerCase() || '',
         })
-        setPayload({ description: typeof editProduct?.description === 'object' ? editProduct?.description?.join(',') : editProduct?.description })
+        setPayload({ description: typeof editProduct?.description === 'object' ? editProduct?.description?.join(', ') : editProduct?.description })
         setPreview({
             thumb: editProduct?.thumb || '',
             images: editProduct?.images || []

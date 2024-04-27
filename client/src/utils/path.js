@@ -23,7 +23,10 @@ const path = {
 
     // Number 
     MEMBER: 'member',
-    PERSONAL: 'personal'
+    PERSONAL: 'personal',
+    MY_CART: 'my-cart',
+    HISTORY: 'buy-history',
+    WISHLIST: 'wishlist',
 }
 
 export default path

@@ -10,7 +10,7 @@ const FeatureProducts = () => {
     const [products, setProducts] = useState(null)
 
     const fetchProducts = async () => {
-        const response = await apiGetProducts({ limit: 9, totalRatings: 5 })
+        const response = await apiGetProducts({ limit: 9, sort: '-totalRatings' })
         if (response.success) setProducts(response.products)
     }
     useEffect(() => {
@@ -19,7 +19,7 @@ const FeatureProducts = () => {
     return (
         <div className='w-main'>
             <h3 className='text-[20px] font-semibold py-[15px] border-b-2 border-main'>FEATURED PRODUCTS</h3>
-            <div className='flex flex-wrap mt-[15px] m-[-10px]'>
+            <div className='flex flex-wrap mt-[15px] m-[-10px] mb-[-5px]'>
                 {products?.map(el => (
                     <ProductCard
                         key={el._id}
@@ -30,24 +30,24 @@ const FeatureProducts = () => {
                     />
                 ))}
             </div>
-            <div className='flex justify-between mt-3'>
+            <div className='grid grid-cols-4 grid-rows-2 gap-4'>
                 <img src={bannerleft}
                     alt="bannerleft"
-                    className='w-[50%] object-contain'
-
+                    className='w-full h-full object-cover col-span-2 row-span-2'
                 />
-                <div className='flex flex-col justify-between w-[24%]'>
-                    <img src={bannertop}
-                        alt="bannertop"
-                    />
-                    <img src={bannerbottom}
-                        alt="bannerbottom"
-                    />
-                </div>
+                <img src={bannertop}
+                    alt="bannertop"
+                    className='w-full h-full object-cover col-span-1 row-span-1'
+                />
                 <img src={bannerright}
                     alt="banneright"
-                    className='w-[24%] object-contain h-auto'
+                    className='w-full h-full object-cover col-span-1 row-span-2'
                 />
+                <img src={bannerbottom}
+                    alt="bannerbottom"
+                    className='w-full h-full object-cover col-span-1 row-span-1'
+                />
+
             </div>
         </div>
     )

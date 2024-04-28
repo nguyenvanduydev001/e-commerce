@@ -5,6 +5,7 @@ import banner1 from 'assets/banner1.png'
 import banner2 from 'assets/banner2.png'
 import { getNewProducts } from "store/products/asyncActions";
 import { useDispatch, useSelector } from "react-redux";
+import clsx from "clsx";
 
 
 const tabs = [
@@ -18,6 +19,7 @@ const BestSellers = () => {
     const [products, setProducts] = useState(null)
     const dispatch = useDispatch() //
     const { newProducts } = useSelector(state => state.products)
+    const { isShowModal } = useSelector(state => state.app)
 
     const fetchProducts = async () => {
         const response = await apiGetProducts({ sort: '-sold' })
@@ -36,7 +38,7 @@ const BestSellers = () => {
         if (activedTab === 2) setProducts(newProducts)
     }, [activedTab])
     return (
-        <div>
+        <div className={clsx(isShowModal ? 'hidden' : '')}>
             <div className="flex text-[20px] ml-[-32px]">
                 {tabs.map(el => (
                     <span

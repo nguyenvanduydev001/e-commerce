@@ -5,18 +5,27 @@ import trending from 'assets/trending.png'
 import { renderStartFromNumber } from 'utils/helpers'
 import { SelectOption } from '../'
 import icons from 'utils/icons'
-import { Link } from "react-router-dom";
-import path from 'utils/path'
+import withBaseComponent from "hocs/withBaseComponent";
+import { showModal } from "store/app/appSlice";
+import { DetailProduct } from "pages/public";
 
 const { AiFillEye, AiOutlineMenu, BsFillSuitHeartFill } = icons
 
-const Product = ({ productData, isNew, normal }) => {
+const Product = ({ productData, isNew, normal, navigate, dispatch }) => {
     const [isShowOption, setIsShowOption] = useState(false)
+    const handleClickOptions = (e, flag) => {
+        e.stopPropagation()
+        if (flag === 'MENU') navigate(`/${productData?.category?.toLowerCase()}/${productData?._id}/${productData?.title}`)
+        if (flag === 'WISHLIST') console.log('WISHLIST')
+        if (flag === 'QUICK_VIEW') {
+            dispatch(showModal({ isShowModal: true, modalChildren: <DetailProduct data={{ pid: productData?._id, category: productData?.category }} isQuickView /> }))
+        }
+    }
     return (
         <div className="w-full text-base px-[10px]">
-            <Link
+            <div
                 className="w-full border p-[15px] flex flex-col items-center"
-                to={`/${productData?.category?.toLowerCase()}/${productData?._id}/${productData?.title}`}
+                onClick={e => navigate(`/${productData?.category?.toLowerCase()}/${productData?._id}/${productData?.title}`)}
                 onMouseEnter={e => {
                     e.stopPropagation()
                     setIsShowOption(true)
@@ -30,9 +39,9 @@ const Product = ({ productData, isNew, normal }) => {
                     {isShowOption && <div
                         className="absolute bottom-[-10px] left-0 right-0 flex justify-center gap-2 animate-slide-top"
                     >
-                        <SelectOption icon={<BsFillSuitHeartFill />} />
-                        <SelectOption icon={<AiOutlineMenu />} />
-                        <SelectOption icon={<AiFillEye />} />
+                        <span onClick={(e) => handleClickOptions(e, 'WISHLIST')}><SelectOption icon={<BsFillSuitHeartFill />} /></span>
+                        <span onClick={(e) => handleClickOptions(e, 'MENU')}><SelectOption icon={<AiOutlineMenu />} /></span>
+                        <span onClick={(e) => handleClickOptions(e, 'QUICK_VIEW')}><SelectOption icon={<AiFillEye />} /></span>
                     </div>}
                     <img
                         src={productData?.thumb || 'https://3qleather.com/wp-content/themes/olympusinn/assets/images/default-placeholder.png'}
@@ -48,9 +57,9 @@ const Product = ({ productData, isNew, normal }) => {
                     <span className="line-clamp-1">{productData?.title}</span>
                     <span>{`${formatMoney(productData?.price)} VNĐ`}</span>
                 </div>
-            </Link>
+            </div>
         </div>
     )
 }
 
-export default memo(Product)
+export default withBaseComponent(memo(Product))

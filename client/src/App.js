@@ -10,7 +10,8 @@ import {
   Blogs,
   Products,
   FinalRegister,
-  ResetPassword
+  ResetPassword,
+  DetailCart
 } from './pages/public'
 import {
   AdminLayout,
@@ -35,6 +36,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Cart, Modal } from 'components';
 import { showCart } from 'store/app/appSlice'
 
+
 function App() {
   const dispatch = useDispatch()
   const { isShowModal, modalChildren, isShowCart } = useSelector(state => state.app)
@@ -56,6 +58,7 @@ function App() {
           <Route path={path.OUR_SERVICES} element={<Services />} />
           <Route path={path.PRODUCTS} element={<Products />} />
           <Route path={path.RESET_PASSWORD} element={<ResetPassword />} />
+          <Route path={path.DETAIL_CART} element={<DetailCart />} />
           <Route path={path.ALL} element={<Home />} />
         </Route>
         <Route path={path.ADMIN} element={<AdminLayout />}>

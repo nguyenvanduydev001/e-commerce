@@ -73,7 +73,36 @@ const CreateProducts = () => {
             } else toast.error(response.mes)
         }
     }
+    // const [notification, setNotification] = useState(null);
+    // const handleCreateProduct = async (data) => {
+    //     const invalids = validate(payload, setInvalidFields);
+    //     if (invalids === 0) {
+    //         if (data.category) data.category = categories?.find(el => el._id === data.category)?.title;
+    //         const finalPayload = { ...data, ...payload };
+    //         const formData = new FormData();
+    //         for (let i of Object.entries(finalPayload)) formData.append(i[0], i[1]);
+    //         if (finalPayload.thumb) formData.append('thumb', finalPayload.thumb[0]);
+    //         if (finalPayload.images) {
+    //             for (let image of finalPayload.images) formData.append('images', image);
+    //         }
+    //         dispatch(showModal({ isShowModal: true, modalChildren: <Loading /> }));
 
+    //         try {
+    //             const response = await apiCreateProduct(formData);
+    //             if (response.success) {
+    //                 setNotification({ type: 'success', message: response.mes });
+    //                 reset();
+    //                 setPayload({ thumb: '', image: [] });
+    //             } else {
+    //                 setNotification({ type: 'error', message: response.mes });
+    //             }
+    //         } catch (error) {
+    //             setNotification({ type: 'error', message: 'An error occurred while processing your request.' });
+    //         } finally {
+    //             dispatch(showModal({ isShowModal: false, modalChildren: null }));
+    //         }
+    //     }
+    // };
 
     return (
         <div className='w-full'>

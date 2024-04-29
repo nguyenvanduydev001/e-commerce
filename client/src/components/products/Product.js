@@ -36,10 +36,11 @@ const Product = ({ productData, isNew, normal, navigate, dispatch }) => {
             })
             const response = await apiUpdateCart({ pid: productData._id, color: productData.color })
             if (response.success) {
-                toast.success(response.mes)
-                dispatch(getCurrent())
+                toast.success(response.mes || "Product added to cart successfully");
+                dispatch(getCurrent());
+            } else {
+                toast.error(response.mes || "Failed to add product to cart");
             }
-            else toast.error(response.mes)
         }
         if (flag === 'WISHLIST') console.log('WISHLIST')
         if (flag === 'QUICK_VIEW') {

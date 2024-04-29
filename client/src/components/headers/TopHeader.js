@@ -49,4 +49,4 @@ const TopHeader = () => {
     );
 }
 
-export default memo(TopHeader);
+export default TopHeader

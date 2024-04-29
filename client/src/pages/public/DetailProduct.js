@@ -68,6 +68,14 @@ const DetailProduct = ({ isQuickView, data, location, dispatch, navigate }) => {
                 price: product?.varriants?.find(el => el.sku === varriant)?.price,
                 thumb: product?.varriants?.find(el => el.sku === varriant)?.thumb,
             })
+        } else {
+            setCurrentProduct({
+                title: product?.title,
+                color: product?.color,
+                images: product?.images || [],
+                price: product?.price,
+                thumb: product?.thumb,
+            })
         }
     }, [varriant])
     const fetchProducts = async () => {
@@ -87,7 +95,6 @@ const DetailProduct = ({ isQuickView, data, location, dispatch, navigate }) => {
     const rerender = useCallback(() => {
         setUpdate(!update)
     }, [update])
-    console.log(product)
     const handleQuantity = useCallback((number) => {
         if (!Number(number) || Number(number) < 1) {
             return
@@ -119,13 +126,19 @@ const DetailProduct = ({ isQuickView, data, location, dispatch, navigate }) => {
                 search: createSearchParams({ redirect: location.pathname }).toString()
             })
         })
-        const response = await apiUpdateCart({ pid, color: currentProduct.color, quantity })
+        const response = await apiUpdateCart({
+            pid,
+            color: currentProduct.color || product?.color,
+            quantity,
+            price: currentProduct.price || product.price,
+            thumbnail: currentProduct.thumb || product.thumb,
+            title: currentProduct.title || product.title,
+        })
         if (response.success) {
-            // toast.success(response.mes || "Product added to cart successfully");
-            dispatch(getCurrent());
-        } else {
-            toast.error(response.mes || "Failed to add product to cart");
+            toast.success(response.mes)
+            dispatch(getCurrent())
         }
+        else toast.error(response.mes)
     }
     return (
         <div className={clsx('w-full')}>
@@ -191,6 +204,7 @@ const DetailProduct = ({ isQuickView, data, location, dispatch, navigate }) => {
                             </div>
                             {product?.varriants?.map(el => (
                                 <div
+                                    key={el.sku}
                                     onClick={() => setVarriant(el.sku)}
                                     className={clsx('flex items-center gap-2 p-2 border cursor-pointer', varriant === el.sku && 'border-red-500')}
                                 >

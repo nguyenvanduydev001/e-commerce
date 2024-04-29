@@ -275,18 +275,25 @@ const updateUserAddress = asyncHandler(async (req, res) => {
 })
 const updateCart = asyncHandler(async (req, res) => {
     const { _id } = req.user
-    const { pid, quantity = 1, color } = req.body
+    const { pid, quantity = 1, color, price, thumbnail, title } = req.body
     if (!pid || !color) throw new Error('Missig inputs')
     const user = await User.findById(_id).select('cart')
     const alreadyProduct = user?.cart?.find(el => el.product.toString() === pid)
-    if (alreadyProduct) {
-        const response = await User.updateOne({ cart: { $elemMatch: alreadyProduct } }, { $set: { "cart.$.quantity": quantity, "cart.$.color": color } }, { new: true })
+    if (alreadyProduct && alreadyProduct.color === color) {
+        const response = await User.updateOne({ cart: { $elemMatch: alreadyProduct } }, {
+            $set: {
+                "cart.$.quantity": quantity,
+                "cart.$.price": price,
+                "cart.$.thumbnail": thumbnail,
+                "cart.$.title": title,
+            }
+        }, { new: true })
         return res.status(200).json({
             success: response ? true : false,
             mes: response ? 'Updated your cart' : 'Something went wrong'
         })
     } else {
-        const response = await User.findByIdAndUpdate(_id, { $push: { cart: { product: pid, quantity, color } } }, { new: true })
+        const response = await User.findByIdAndUpdate(_id, { $push: { cart: { product: pid, quantity, color, price, thumbnail, title } } }, { new: true })
         return res.status(200).json({
             success: response ? true : false,
             mes: response ? 'Updated your cart' : 'Something went wrong'
@@ -295,14 +302,14 @@ const updateCart = asyncHandler(async (req, res) => {
 })
 const removeProductInCart = asyncHandler(async (req, res) => {
     const { _id } = req.user
-    const { pid } = req.params
+    const { pid, color } = req.params
     const user = await User.findById(_id).select('cart')
-    const alreadyProduct = user?.cart?.find(el => el.product.toString() === pid)
+    const alreadyProduct = user?.cart?.find(el => el.product.toString() === pid && el.color === color)
     if (!alreadyProduct) return res.status(200).json({
         success: true,
         mes: 'Updated your cart'
     })
-    const response = await User.findByIdAndUpdate(_id, { $pull: { cart: { product: pid } } }, { new: true })
+    const response = await User.findByIdAndUpdate(_id, { $pull: { cart: { product: pid, color } } }, { new: true })
     return res.status(200).json({
         success: response ? true : false,
         mes: response ? 'Updated your cart' : 'Something went wrong'

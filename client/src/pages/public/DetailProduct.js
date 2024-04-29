@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { apiGetProduct, apiGetProducts } from '../../apis';
+import { createSearchParams, useParams } from 'react-router-dom';
+import { apiGetProduct, apiGetProducts, apiUpdateCart } from '../../apis';
 import { Breadcrumd, Button, SelectQuantity, ProductExtraInfoItem, Productinfomation, CustomSlider } from '../../components'
 import Slider from 'react-slick'
 import ReactImageZoom from 'react-image-zoom';
@@ -8,6 +8,12 @@ import { formatMoney, fotmatPrice, renderStartFromNumber } from '../../utils/hel
 import { productExtraInfomation } from '../../utils/contants'
 import DOMPurify from 'dompurify';
 import clsx from 'clsx';
+import { useSelector } from 'react-redux';
+import Swal from 'sweetalert2';
+import { toast } from 'react-toastify';
+import withBaseComponent from 'hocs/withBaseComponent';
+import path from 'utils/path';
+import { getCurrent } from 'store/user/asyncActions';
 
 const settings = {
     dots: false,
@@ -17,9 +23,10 @@ const settings = {
     slidesToScroll: 1
 };
 
-const DetailProduct = ({ isQuickView, data }) => {
+const DetailProduct = ({ isQuickView, data, location, dispatch, navigate }) => {
 
     const params = useParams()
+    const { current } = useSelector(state => state.user)
     const [product, setProduct] = useState(null)
     const [currentImage, setCurrentImage] = useState(null)
     const [quantity, setQuantity] = useState(1)
@@ -97,6 +104,28 @@ const DetailProduct = ({ isQuickView, data }) => {
     const handleClickImage = (e, el) => {
         e.stopPropagation()
         setCurrentImage(el)
+    }
+    const handleAddToCart = async () => {
+        if (!current) return Swal.fire({
+            title: 'Almost...',
+            text: 'Please login first!',
+            icon: 'info',
+            cancelButtonText: 'Not now!',
+            showCancelButton: true,
+            confirmButtonText: 'Go login page'
+        }).then((rs) => {
+            if (rs.isConfirmed) navigate({
+                pathname: `/${path.LOGIN}`,
+                search: createSearchParams({ redirect: location.pathname }).toString()
+            })
+        })
+        const response = await apiUpdateCart({ pid, color: currentProduct.color, quantity })
+        if (response.success) {
+            // toast.success(response.mes || "Product added to cart successfully");
+            dispatch(getCurrent());
+        } else {
+            toast.error(response.mes || "Failed to add product to cart");
+        }
     }
     return (
         <div className={clsx('w-full')}>
@@ -183,7 +212,7 @@ const DetailProduct = ({ isQuickView, data }) => {
                                 handleChangeQuantity={handleChangeQuantity}
                             />
                         </div>
-                        <Button fw>
+                        <Button handleOnClick={handleAddToCart} fw>
                             Add to Cart
                         </Button>
                     </div>
@@ -223,4 +252,4 @@ const DetailProduct = ({ isQuickView, data }) => {
     );
 }
 
-export default DetailProduct;
+export default withBaseComponent(DetailProduct);

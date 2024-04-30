@@ -1,12 +1,11 @@
-import { Breadcrumd, Button, SelectQuantity } from "components";
+import { Breadcrumd, Button } from "components";
 import OrderItem from "components/products/OrderItem";
 import withBaseComponent from "hocs/withBaseComponent";
-import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { formatMoney } from "utils/helpers";
 
 const DetailCart = ({ location }) => {
-    const { current } = useSelector(state => state.user)
+    const { currentCart } = useSelector(state => state.user)
 
     return (
         <div className="w-full">
@@ -22,14 +21,18 @@ const DetailCart = ({ location }) => {
                     <span className="col-span-1 w-full text-center">Quantity</span>
                     <span className="col-span-3 w-full text-center">Price</span>
                 </div>
-                {current?.cart?.map(el => (
-                    <OrderItem key={el._id} el={el} />
+                {currentCart?.map(el => (
+                    <OrderItem
+                        key={el._id}
+                        el={el}
+                        defaultQuantity={el.quantity}
+                    />
                 ))}
             </div>
             <div className="w-main mx-auto flex flex-col justify-center mb-12 items-end gap-3">
                 <span className="flex items-center gap-8 text-sm">
                     <span>Subtotal:</span>
-                    <span className="text-main font-bold">{`${formatMoney(current?.cart?.reduce((sum, el) => +el?.price + sum, 0))} VND`}</span>
+                    <span className="text-main font-bold">{`${formatMoney(currentCart?.reduce((sum, el) => +el?.price * el.quantity + sum, 0))} VND`}</span>
                 </span>
                 <span className="text-xs italic">Shipping, taxes, and discounts calculated at checkout</span>
                 <Button>Checkout</Button>

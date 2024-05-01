@@ -15,10 +15,11 @@ import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import path from "utils/path";
 import { BsFillCartCheckFill, BsFillCartPlusFill } from 'react-icons/bs'
+import { createSearchParams } from "react-router-dom";
 
 const { AiFillEye, BsFillSuitHeartFill } = icons
 
-const Product = ({ productData, isNew, normal, navigate, dispatch }) => {
+const Product = ({ productData, isNew, normal, navigate, dispatch, location }) => {
     const [isShowOption, setIsShowOption] = useState(false)
     const { current } = useSelector(state => state.user)
     const handleClickOptions = async (e, flag) => {
@@ -32,21 +33,31 @@ const Product = ({ productData, isNew, normal, navigate, dispatch }) => {
                 showCancelButton: true,
                 confirmButtonText: 'Go login page'
             }).then((rs) => {
-                if (rs.isConfirmed) navigate(`/${path.LOGIN}`)
+                if (rs.isConfirmed) navigate({
+                    pathname: `/${path.LOGIN}`,
+                    search: createSearchParams({ redirect: location.pathname }).toString()
+                })
             })
-            const response = await apiUpdateCart({ pid: productData._id, color: productData.color })
+            const response = await apiUpdateCart({
+                pid: productData?._id,
+                color: productData?.color,
+                quantity: 1,
+                price: productData?.price,
+                thumbnail: productData?.thumb,
+                title: productData?.title,
+            })
             if (response.success) {
-                toast.success(response.mes || "Product added to cart successfully");
-                dispatch(getCurrent());
-            } else {
-                toast.error(response.mes || "Failed to add product to cart");
+                toast.success(response.mes)
+                dispatch(getCurrent())
             }
+            else toast.error(response.mes)
         }
         if (flag === 'WISHLIST') console.log('WISHLIST')
         if (flag === 'QUICK_VIEW') {
             dispatch(showModal({ isShowModal: true, modalChildren: <DetailProduct data={{ pid: productData?._id, category: productData?.category }} isQuickView /> }))
         }
     }
+    console.log(productData)
     return (
         <div className="w-full text-base px-[10px]">
             <div

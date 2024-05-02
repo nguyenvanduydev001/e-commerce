@@ -1,6 +1,6 @@
 import React, { memo } from 'react'
-// import banner from '../assets/banner1.jpg'
-import banner from 'assets/banner1.jpg'
+// import banner from 'assets/banner1.jpg'
+import banner from 'assets/banner_summer.png'
 
 const Banner = () => {
     return (

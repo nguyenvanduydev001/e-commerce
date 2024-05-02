@@ -12,16 +12,19 @@ import { apiRemoveCart } from 'apis'
 import path from 'utils/path'
 
 const Cart = ({ dispatch, navigate }) => {
-    const { currentCart } = useSelector(state => state.user)
+    const { currentCart } = useSelector(state => state.user);
     const removeCart = async (pid, color) => {
-        const response = await apiRemoveCart(pid, color)
+        const response = await apiRemoveCart(pid, color);
         if (response.success) {
-            dispatch(getCurrent())
+            dispatch(getCurrent());
+        } else {
+            toast.error(response.mes);
         }
-        else toast.error(response.mes)
     };
-    // Fix category page
-    // Payment method
+
+    // Filter out products with null product
+    const filteredCart = currentCart.filter(el => el.product !== null);
+
     return (
         <div onClick={e => e.stopPropagation()} className='w-[400px] h-screen overflow-auto bg-black grid grid-rows-10 text-white p-6'>
             <header className='border-b border-gray-500 flex justify-between items-center row-span-1 h-full font-bold text-2xl'>
@@ -29,8 +32,8 @@ const Cart = ({ dispatch, navigate }) => {
                 <span onClick={() => dispatch(showCart())} className='p-2 cursor-pointer'><AiFillCloseCircle size={24} /></span>
             </header>
             <section className='row-span-7 flex flex-col gap-3 h-full max-h-full overflow-y-auto py-3'>
-                {!currentCart && <span className='text-xs italic'>Your cart is empty.</span>}
-                {currentCart && currentCart.map(el => (
+                {!filteredCart.length && <span className='text-xs italic'>Your cart is empty.</span>}
+                {filteredCart.map(el => (
                     <div key={el._id} className='flex justify-between items-center'>
                         <div className='flex gap-2'>
                             <img src={el.thumbnail} alt="thumb" className='w-16 h-16 object-cover' />
@@ -48,16 +51,16 @@ const Cart = ({ dispatch, navigate }) => {
             <div className='row-span-2 flex flex-col justify-between h-full'>
                 <div className='flex items-center justify-between pt-4 border-t'>
                     <span>Subtotal:</span>
-                    <span>{formatMoney(currentCart?.reduce((sum, el) => sum + Number(el?.price) * el.quantity, 0)) + ' VND'}</span>
+                    <span>{formatMoney(filteredCart.reduce((sum, el) => sum + Number(el?.price) * el.quantity, 0)) + ' VND'}</span>
                 </div>
                 <span className='text-center text-gray-700 italic text-xs'>Shipping, taxes, and discounts calculated at checkout.</span>
                 <Button handleOnClick={() => {
-                    dispatch(showCart())
-                    navigate(`/${path.MEMBER}/${path.DETAIL_CART}`)
+                    dispatch(showCart());
+                    navigate(`/${path.MEMBER}/${path.DETAIL_CART}`);
                 }} style='rounded-none w-full bg-main py-3' >Shopping Cart</Button>
             </div>
         </div>
-    )
+    );
 }
 
-export default withBaseComponent(memo(Cart))
+export default withBaseComponent(memo(Cart));

@@ -57,7 +57,6 @@ const Product = ({ productData, isNew, normal, navigate, dispatch, location }) =
             dispatch(showModal({ isShowModal: true, modalChildren: <DetailProduct data={{ pid: productData?._id, category: productData?.category }} isQuickView /> }))
         }
     }
-    console.log(productData)
     return (
         <div className="w-full text-base px-[10px]">
             <div

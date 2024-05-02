@@ -25,11 +25,15 @@ const fn = async (product) => {
 const insertProduct = asyncHandler(async (req, res) => {
     const dataArray = data["[object Object]"]; // Truy cập vào mảng các sản phẩm
 
+    // Xoá tất cả các sản phẩm hiện tại trong giỏ hàng
+    await Product.deleteMany({});
+
     const promises = [];
     for (let product of dataArray) promises.push(fn(product)); // Lặp qua từng sản phẩm
     await Promise.all(promises);
     return res.json('Done');
 });
+
 const fn2 = async (cate) => {
     await ProductCategory.create({
         title: cate?.cate,

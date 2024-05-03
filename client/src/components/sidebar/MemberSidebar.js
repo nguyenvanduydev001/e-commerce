@@ -5,6 +5,7 @@ import { NavLink, Link } from 'react-router-dom'
 import clsx from 'clsx'
 import { AiOutlineCaretDown, AiOutlineCaretRight } from 'react-icons/ai'
 import { useSelector } from 'react-redux'
+import { LuForward } from "react-icons/lu";
 
 const activedStyle = 'px-4 py-2 flex items-center gap-2 text-[#ee3131] font-bold'
 const notActivedStyle = 'px-4 py-2 flex items-center gap-2 text-gray-700 hover:bg-sky-500 hover:text-gray-100'
@@ -55,7 +56,7 @@ const MemberSidebar = () => {
                         </div>}
                     </Fragment>
                 ))}
-                <NavLink to={'/'} className={clsx(notActivedStyle)}>Go home</NavLink>
+                <NavLink to={'/'} className={clsx(notActivedStyle)}><LuForward size={18} />Go home</NavLink>
             </div>
         </div>
     )

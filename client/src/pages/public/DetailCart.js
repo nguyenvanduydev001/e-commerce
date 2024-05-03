@@ -1,14 +1,36 @@
+import { current } from "@reduxjs/toolkit";
 import { Breadcrumd, Button } from "components";
 import OrderItem from "components/products/OrderItem";
 import withBaseComponent from "hocs/withBaseComponent";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, createSearchParams } from "react-router-dom";
+import Swal from "sweetalert2";
 import { formatMoney } from "utils/helpers";
 import path from "utils/path";
 
-const DetailCart = ({ location }) => {
-    const { currentCart } = useSelector(state => state.user)
-    const filteredCart = currentCart.filter(el => el.product !== null);
+const DetailCart = ({ location, navigate }) => {
+    const { currentCart, current } = useSelector(state => state.user)
+    console.log(location.pathname)
+    const handleSubmit = () => {
+        if (!current?.address) return Swal.fire({
+            icon: 'info',
+            title: 'Almost!',
+            text: 'Please update your address before checkout',
+            showCancelButton: true,
+            showConfirmButton: true,
+            confirmButtonText: 'Go update',
+            cancelButtonText: 'Cancel',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                navigate({
+                    pathname: `/${path.MEMBER}/${path.PERSONAL}`,
+                    search: createSearchParams({ redirect: location.pathname }).toString(),
+                });
+            }
+        });
+        else window.open(`/${path.CHECKOUT}`, '_blank')
+    }
+    console.log(currentCart)
     return (
         <div className="w-full">
             <div className='h-[81px] flex justify-center items-center bg-gray-100'>
@@ -23,7 +45,7 @@ const DetailCart = ({ location }) => {
                     <span className="col-span-1 w-full text-center">Quantity</span>
                     <span className="col-span-3 w-full text-center">Price</span>
                 </div>
-                {filteredCart.map(el => (
+                {currentCart.map(el => (
                     <OrderItem
                         key={el._id}
                         dfQuantity={el.quantity}
@@ -38,10 +60,10 @@ const DetailCart = ({ location }) => {
             <div className="w-main mx-auto flex flex-col justify-center mb-12 items-end gap-3">
                 <span className="flex items-center gap-8 text-sm">
                     <span>Subtotal:</span>
-                    <span className="text-main font-bold">{formatMoney(filteredCart.reduce((sum, el) => sum + Number(el?.price) * el.quantity, 0)) + ' VND'}</span>
+                    <span className="text-main font-bold">{formatMoney(currentCart.reduce((sum, el) => sum + Number(el?.price) * el.quantity, 0)) + ' VND'}</span>
                 </span>
                 <span className="text-xs italic">Shipping, taxes, and discounts calculated at checkout</span>
-                <Link target="_blank" className="bg-main text-white px-4 py-2 rounded-md" to={`/${path.CHECKOUT}`}>Checkout</Link>
+                <Button handleOnClick={handleSubmit}>Checkout</Button>
             </div>
         </div>
 

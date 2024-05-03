@@ -38,7 +38,6 @@ Khi người dùng like một bài blog thì:
 const likeBlog = asyncHandler(async (req, res) => {
     const { _id } = req.user
     const { bid } = req.params
-    if (!bid) throw new Error('Missing inputs')
     const blog = await Blog.findById(bid)
     const alreadyDisliked = blog?.dislikes?.find(el => el.toString() === _id)
     if (alreadyDisliked) {

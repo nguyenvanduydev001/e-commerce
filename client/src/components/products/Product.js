@@ -8,7 +8,7 @@ import icons from 'utils/icons'
 import withBaseComponent from "hocs/withBaseComponent";
 import { showModal } from "store/app/appSlice";
 import { DetailProduct } from "pages/public";
-import { apiUpdateCart } from "apis";
+import { apiUpdateCart, apiUpdateWishlist } from "apis";
 import { toast } from "react-toastify";
 import { getCurrent } from "store/user/asyncActions";
 import { useSelector } from "react-redux";
@@ -16,10 +16,11 @@ import Swal from "sweetalert2";
 import path from "utils/path";
 import { BsFillCartCheckFill, BsFillCartPlusFill } from 'react-icons/bs'
 import { createSearchParams } from "react-router-dom";
+import clsx from "clsx";
 
 const { AiFillEye, BsFillSuitHeartFill } = icons
 
-const Product = ({ productData, isNew, normal, navigate, dispatch, location }) => {
+const Product = ({ productData, isNew, normal, navigate, dispatch, location, pid, className }) => {
     const [isShowOption, setIsShowOption] = useState(false)
     const { current } = useSelector(state => state.user)
     const handleClickOptions = async (e, flag) => {
@@ -52,13 +53,20 @@ const Product = ({ productData, isNew, normal, navigate, dispatch, location }) =
             }
             else toast.error(response.mes)
         }
-        if (flag === 'WISHLIST') console.log('WISHLIST')
+        if (flag === 'WISHLIST') {
+            const response = await apiUpdateWishlist(pid)
+            if (response.success) {
+                dispatch(getCurrent())
+                toast.success(response.mes)
+            } else toast.error(response.mes)
+            console.log(pid)
+        }
         if (flag === 'QUICK_VIEW') {
             dispatch(showModal({ isShowModal: true, modalChildren: <DetailProduct data={{ pid: productData?._id, category: productData?.category }} isQuickView /> }))
         }
     }
     return (
-        <div className="w-full text-base px-[10px]">
+        <div className={clsx("w-full text-base px-[10px]", className)}>
             <div
                 className="w-full border p-[15px] flex flex-col items-center"
                 onClick={e => navigate(`/${productData?.category?.toLowerCase()}/${productData?._id}/${productData?.title}`)}
@@ -75,7 +83,7 @@ const Product = ({ productData, isNew, normal, navigate, dispatch, location }) =
                     {isShowOption && <div
                         className="absolute bottom-[-10px] left-0 right-0 flex justify-center gap-2 animate-slide-top"
                     >
-                        <span title="Add wishlist" onClick={(e) => handleClickOptions(e, 'WISHLIST')}><SelectOption icon={<BsFillSuitHeartFill />} /></span>
+                        <span title="Add wishlist" onClick={(e) => handleClickOptions(e, 'WISHLIST')}><SelectOption icon={<BsFillSuitHeartFill color={current?.wishlist?.some(i => i === pid) ? 'red' : 'gray'} />} /></span>
                         {current?.cart?.some(el => el.product === productData._id.toString())
                             ? <span title="Added to Cart"><SelectOption icon={<BsFillCartCheckFill color="green" />} /></span>
                             : <span title="Add to Cart" onClick={(e) => handleClickOptions(e, 'CART')}><SelectOption icon={<BsFillCartPlusFill />} /></span>}

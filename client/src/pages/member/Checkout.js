@@ -15,13 +15,13 @@ const Checkout = ({ dispatch }) => {
     console.log(currentCart)
 
     return (
-        <div className="p-8 w-full grid grid-cols-10 gap-6 h-full max-h-screen overflow-y-auto">
+        <div className="p-8 w-full grid grid-cols-10 gap-6 h-full max-h-screen overflow-y-auto  bg-gray-100">
             {isSuccess && <Congrat />}
             <div className="w-full flex justify-center items-center col-span-4">
                 <img src={payment} alt="payment" className="h-[70%] object-contain" />
             </div>
-            <div className="flex w-full flex-col justify-center  col-span-6 gap-6">
-                <h2 className="text-3xl mb-6 font-bold">Checkout your order</h2>
+            <div className="flex w-full flex-col justify-center  col-span-6 gap-6 bg-white rounded-lg shadow-lg overflow-hidden">
+                <h2 className="text-3xl mb-6 font-bold text-gray-800 px-6 py-4 bg-gray-200">Checkout your order</h2>
                 <div className="flex w-full gap-6">
                     <div className="flex-1">
                         <table className="table-auto h-fit">

@@ -101,8 +101,6 @@ const getProducts = asyncHanler(async (req, res) => {
     }
 });
 
-
-
 const updateProduct = asyncHanler(async (req, res) => {
     const { pid } = req.params
     const files = req?.files

@@ -83,7 +83,7 @@ const Product = ({ productData, isNew, normal, navigate, dispatch, location, pid
                     {isShowOption && <div
                         className="absolute bottom-[-10px] left-0 right-0 flex justify-center gap-2 animate-slide-top"
                     >
-                        <span title="Add wishlist" onClick={(e) => handleClickOptions(e, 'WISHLIST')}><SelectOption icon={<BsFillSuitHeartFill color={current?.wishlist?.some(i => i === pid) ? 'red' : 'gray'} />} /></span>
+                        <span title="Add wishlist" onClick={(e) => handleClickOptions(e, 'WISHLIST')}><SelectOption icon={<BsFillSuitHeartFill color={current?.wishlist?.some(i => i._id === pid) ? 'red' : 'gray'} />} /></span>
                         {current?.cart?.some(el => el.product === productData._id.toString())
                             ? <span title="Added to Cart"><SelectOption icon={<BsFillCartCheckFill color="green" />} /></span>
                             : <span title="Add to Cart" onClick={(e) => handleClickOptions(e, 'CART')}><SelectOption icon={<BsFillCartPlusFill />} /></span>}

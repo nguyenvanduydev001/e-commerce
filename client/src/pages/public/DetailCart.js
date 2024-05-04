@@ -63,7 +63,7 @@ const DetailCart = ({ location, navigate }) => {
                     <span className="text-main font-bold">{formatMoney(currentCart.reduce((sum, el) => sum + Number(el?.price) * el.quantity, 0)) + ' VND'}</span>
                 </span>
                 <span className="text-xs italic">Shipping, taxes, and discounts calculated at checkout</span>
-                <Button handleOnClick={handleSubmit}>Checkout</Button>
+                <Button handleOnClick={handleSubmit}>Checkout ➡</Button>
             </div>
         </div>
 

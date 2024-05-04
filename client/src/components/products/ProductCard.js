@@ -1,9 +1,10 @@
+import withBaseComponent from 'hocs/withBaseComponent';
 import React, { memo } from 'react';
 import { renderStartFromNumber, formatMoney } from 'utils/helpers'
 
-const ProductCard = ({ price, totalRatings, title, image }) => {
+const ProductCard = ({ price, totalRatings, title, image, pid, navigate, category }) => {
     return (
-        <div className='w-1/3 flex-auto px-[10px] mb-[20px]'>
+        <div onClick={e => navigate(`/${category?.toLowerCase()}/${pid}/${title}`)} className='w-1/3 flex-auto px-[10px] mb-[20px] cursor-pointer'>
             <div className='flex w-full border'>
                 <img src={image} alt="products" className='w-[120px] object-contain p-4' />
                 <div className="flex flex-col gap-1 mt-[15px] items-start w-full text-xs">
@@ -18,4 +19,4 @@ const ProductCard = ({ price, totalRatings, title, image }) => {
     );
 }
 
-export default memo(ProductCard);
+export default withBaseComponent(memo(ProductCard));

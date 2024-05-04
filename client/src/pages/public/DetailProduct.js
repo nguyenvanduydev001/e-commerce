@@ -146,8 +146,8 @@ const DetailProduct = ({ isQuickView, data, location, dispatch, navigate }) => {
     return (
         <div className={clsx('w-full')}>
             {!isQuickView && <div className='h-[81px] flex justify-center items-center bg-gray-100'>
-                <div ref={titleRef} className='w-main'>
-                    <h3 className='font-semibold'>{currentProduct.title || product?.title}</h3>
+                <div className='w-main'>
+                    <h3 ref={titleRef} className='font-semibold'>{currentProduct.title || product?.title}</h3>
                     <Breadcrumd title={currentProduct.title || product?.title} category={category} />
                 </div>
             </div>}

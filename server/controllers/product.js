@@ -48,6 +48,7 @@ const getProducts = asyncHanler(async (req, res) => {
     let colorQueryObject = {}
     if (queries?.title) formatedQueries.title = { $regex: queries.title, $options: 'i' }
     if (queries?.category) formatedQueries.category = { $regex: queries.category, $options: 'i' }
+    if (queries?.brand) formatedQueries.brand = { $regex: queries.brand, $options: 'i' }
     if (queries?.color) {
         delete formatedQueries.color
         const colorArr = queries.color?.split(',')
@@ -63,7 +64,7 @@ const getProducts = asyncHanler(async (req, res) => {
                 { title: { $regex: queries.q, $options: 'i' } },
                 { category: { $regex: queries.q, $options: 'i' } },
                 { brand: { $regex: queries.q, $options: 'i' } },
-                { description: { $regex: queries.q, $options: 'i' } },
+                // { description: { $regex: queries.q, $options: 'i' } },
             ]
         }
     }

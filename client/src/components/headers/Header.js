@@ -7,6 +7,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { logout } from 'store/user/userSlice'
 import withBaseComponent from 'hocs/withBaseComponent'
 import { showCart } from 'store/app/appSlice'
+import { IoLogOut } from "react-icons/io5";
+import { FaUser, FaUserCog } from 'react-icons/fa'
 
 const { RiPhoneFill, MdEmail, BsHandbagFill, FaUserCircle } = icons
 const Header = ({ dispatch }) => {
@@ -58,16 +60,16 @@ const Header = ({ dispatch }) => {
                             <FaUserCircle color='red' />
                             <span>Profile</span>
                             {isShowOption && (
-                                <div onClick={e => e.stopPropagation()} className='absolute flex flex-col top-full left-[16px] bg-gray-100 border min-w-[150px] py-2'>
-                                    <Link className='p-2 w-full hover:bg-sky-100' to={`/${path.MEMBER}/${path.PERSONAL}`}>
-                                        Personal
+                                <div onClick={e => e.stopPropagation()} className='absolute flex flex-col top-[51px]  left-[-16px] bg-white border rounded-lg shadow-xl min-w-[150px] py-2'>
+                                    <Link className='p-2 w-full flex hover:bg-white hover:text-main hover:font-semibold' to={`/${path.MEMBER}/${path.PERSONAL}`}>
+                                        <FaUser className='mr-[6px]' size={18} /> Personal
                                     </Link>
                                     {+current.role === 1945 && (
-                                        <Link className='p-2 w-full hover:bg-sky-100' to={`/${path.ADMIN}/${path.DASHBOARD}`}>
-                                            Admin workspace
+                                        <Link className='p-2 w-full flex hover:bg-white hover:text-main hover:font-semibold' to={`/${path.ADMIN}/${path.DASHBOARD}`}>
+                                            <FaUserCog className='mr-[6px]' size={18} /> Admin
                                         </Link>
                                     )}
-                                    <span onClick={() => dispatch(logout())} className='p-2 w-full hover:bg-sky-100'>Logout</span>
+                                    <span onClick={() => dispatch(logout())} className='flex p-2 w-full hover:bg-white hover:text-main hover:font-semibold'><IoLogOut className='mr-[6px]' size={18} /> Logout</span>
                                 </div>
                             )}
                         </div>

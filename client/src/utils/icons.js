@@ -14,7 +14,9 @@ import {
     AiOutlineDashboard
 } from 'react-icons/ai'
 import { IoIosArrowForward } from "react-icons/io";
-import { TbBrandProducthunt } from 'react-icons/tb'
+import { TbBrandProducthunt } from 'react-icons/tb';
+import { CiUser, CiShoppingCart, CiHeart } from "react-icons/ci";
+import { LiaHistorySolid } from "react-icons/lia";
 
 const icons = {
     RiPhoneFill,
@@ -39,7 +41,11 @@ const icons = {
     MdGroups,
     TbBrandProducthunt,
     RiBillLine,
-    BsCartPlus
+    BsCartPlus,
+    CiUser,
+    CiShoppingCart,
+    LiaHistorySolid,
+    CiHeart,
 }
 
 export default icons

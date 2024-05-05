@@ -221,34 +221,36 @@ export const adminSidebar = [
         icon: <RiBillLine size={20} />
     },
 ]
+
+const { CiUser, CiShoppingCart, LiaHistorySolid, CiHeart } = icons
 export const memberSidebar = [
     {
         id: 1,
         type: 'SINGLE',
         text: 'Personal',
         path: `/${path.MEMBER}/${path.PERSONAL}`,
-        icon: <AiOutlineDashboard size={20} />
+        icon: <CiUser size={20} />
     },
     {
         id: 2,
         type: 'SINGLE',
         text: 'My cart',
         path: `/${path.MEMBER}/${path.MY_CART}`,
-        icon: <MdGroups size={20} />
+        icon: <CiShoppingCart size={20} />
     },
     {
         id: 3,
         type: 'SINGLE',
         text: 'Buy histories',
         path: `/${path.MEMBER}/${path.HISTORY}`,
-        icon: <RiBillLine size={20} />
+        icon: <LiaHistorySolid size={20} />
     },
     {
         id: 4,
         type: 'SINGLE',
         text: 'Wishlist',
         path: `/${path.MEMBER}/${path.WISHLIST}`,
-        icon: <RiBillLine size={20} />
+        icon: <CiHeart size={20} />
     },
 ]
 

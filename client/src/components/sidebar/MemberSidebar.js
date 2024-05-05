@@ -4,8 +4,8 @@ import { memberSidebar } from 'utils/contants'
 import { NavLink, Link } from 'react-router-dom'
 import clsx from 'clsx'
 import { AiOutlineCaretDown, AiOutlineCaretRight } from 'react-icons/ai'
-import { useSelector } from 'react-redux'
-import { LuForward } from "react-icons/lu";
+import { useSelector } from 'react-redux';
+import { GoHome } from "react-icons/go";
 
 const activedStyle = 'px-4 py-2 flex items-center gap-2 text-[#ee3131] font-bold'
 const notActivedStyle = 'px-4 py-2 flex items-center gap-2 text-gray-700 hover:bg-sky-500 hover:text-gray-100'
@@ -20,7 +20,9 @@ const MemberSidebar = () => {
     return (
         <div className='py-4 bg-white h-full w-[250px] flex-none'>
             <div className='w-full flex flex-col items-center p-4 justify-center'>
-                <img src={current?.avatar || avatar} alt="avatar" className='w-16 h-16 object-contain' />
+                <Link to={'/'}>
+                    <img src={current?.avatar || avatar} alt="avatar" className='w-16 h-16 object-contain' />
+                </Link>
                 <small>{`${current?.lastname} ${current?.firstname}`}</small>
             </div>
             <div>
@@ -56,7 +58,7 @@ const MemberSidebar = () => {
                         </div>}
                     </Fragment>
                 ))}
-                <NavLink to={'/'} className={clsx(notActivedStyle)}><LuForward size={18} />Go home</NavLink>
+                <NavLink to={'/'} className={clsx(notActivedStyle)}><GoHome size={18} />Go home</NavLink>
             </div>
         </div>
     )

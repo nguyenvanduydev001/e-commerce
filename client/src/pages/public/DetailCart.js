@@ -32,15 +32,14 @@ const DetailCart = ({ location, navigate }) => {
     }
     console.log(currentCart)
     return (
-        <div className="w-full">
+        <div className="w-full relative px-4">
             <div className='h-[81px] flex justify-center items-center bg-gray-100'>
-                <div className='w-main'>
-                    <h3 className='font-semibold text-2xl uppercase'>My Cart</h3>
-                    {/* <Breadcrumd category={location?.pathname?.replace('/', '')?.split('-')?.join(' ')} /> */}
+                <div className='w-full'>
+                    <h3 className='text-3xl font-semibold py-4 border-b border-[#ee3131]'>My Cart</h3>
                 </div>
             </div>
-            <div className="flex flex-col border my-8 w-main mx-auto">
-                <div className="bg-gray-200 w-main mx-auto border-b font-bold py-3 grid grid-cols-10">
+            <div className="flex flex-col border my-8 w-full mx-auto rounded-md drop-shadow">
+                <div className="bg-main  text-white w-full mx-auto border-b font-bold py-3 grid grid-cols-10">
                     <span className="col-span-6 w-full text-center">Products</span>
                     <span className="col-span-1 w-full text-center">Quantity</span>
                     <span className="col-span-3 w-full text-center">Price</span>

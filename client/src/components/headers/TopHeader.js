@@ -32,7 +32,7 @@ const TopHeader = () => {
     }, [mes])
     return (
         <div className='h-[38px] w-full bg-main flex items-center justify-center'>
-            <div className='w-main flex items-center justify-between text-xs text-white'>
+            <div className='w-main my-2 flex items-center justify-between text-xs text-white'>
                 <span>ORDER ONLINE OR CALL US (+1800) 000 8808</span>
                 {isLoggedIn && current
                     ? <div className='flex gap-4 text-sm items-center'>

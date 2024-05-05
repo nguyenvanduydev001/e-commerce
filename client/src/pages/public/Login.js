@@ -9,6 +9,7 @@ import { showModal } from 'store/app/appSlice'
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { validate } from 'utils/helpers';
+import logo from '../../assets/logo.png'
 
 const Login = () => {
     const navigate = useNavigate();
@@ -100,7 +101,7 @@ const Login = () => {
                     </button>
                 </div>
             </div>}
-            {isForgotPassword && <div className='absolute  animate-slide-right top-0 left-0 bottom-0 right-0 bg-white flex flex-col items-center py-8 z-50'>
+            {isForgotPassword && <div className='absolute animate-slide-right top-0 left-0 bottom-0 right-0 bg-white flex flex-col items-center py-8 z-50'>
                 <div className='flex flex-col gap-4'>
                     <label htmlFor="email">Enter your email:</label>
                     <input
@@ -125,13 +126,16 @@ const Login = () => {
                     </div>
                 </div>
             </div>}
-            <img
+            {/* <img
                 src="https://eminence.ch/wp-content/uploads/2023/08/commerce-tips-2022.jpg"
                 alt=""
                 className='w-full h-full object-cover'
-            />
-            <div className='absolute top-0 bottom-0 left-0 right-1/2 items-center justify-center flex'>
-                <div className='p-8 bg-white flex flex-col items-center rounded-md min-w-[500px]'>
+            /> */}
+            <div className='bg-black'>
+            </div>
+            <div className='bg-gradient-to-br from-red-500 to-orange-200 flex justify-center items-center h-screen'>
+                <div className='p-8 bg-white shadow-xl border flex flex-col items-center rounded-md min-w-[500px]'>
+                    <img className='py-3' src={logo} alt="logo" />
                     <h1 className='text-[28px] font-semibold text-main mb-8'>{isRegister ? 'Register' : 'Login'}</h1>
                     {isRegister &&
                         <div className='flex items-center gap-2'>

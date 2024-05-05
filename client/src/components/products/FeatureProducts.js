@@ -16,7 +16,6 @@ const FeatureProducts = () => {
     useEffect(() => {
         fetchProducts()
     }, [])
-    console.log(products)
     return (
         <div className='w-main'>
             <h3 className='text-[20px] font-semibold py-[15px] border-b-2 border-main'>FEATURED PRODUCTS</h3>

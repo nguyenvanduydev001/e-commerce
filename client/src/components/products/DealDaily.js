@@ -1,67 +1,78 @@
-import React, { useState, useEffect, memo } from "react";
-import icons from 'utils/icons'
-import { apiGetProducts } from 'apis/product'
-import { renderStartFromNumber, formatMoney, secondsToHms } from 'utils/helpers'
-import { Countdown } from '../'
-import moment from 'moment'
+import React, { useState, useEffect, useCallback, memo } from "react";
+import icons from "utils/icons";
+import { apiGetProducts } from "apis/product";
+import { renderStartFromNumber, formatMoney, secondsToHms } from "utils/helpers";
+import { Countdown } from "../";
+import moment from "moment";
 import { useSelector } from "react-redux";
 import withBaseComponent from "hocs/withBaseComponent";
 import { getDealDaily } from "store/products/productSlice";
-const { AiFillStar, AiOutlineMenu } = icons
 
-let idInterval
+const { AiFillStar, AiOutlineMenu } = icons;
+
 const DealDaily = ({ dispatch }) => {
-    const [hour, setHour] = useState(0)
-    const [minute, setMinute] = useState(0)
-    const [second, setSecond] = useState(0)
-    const [expireTime, setExpireTime] = useState(false)
-    const { dealDaily } = useSelector(s => s.products)
+    const [hour, setHour] = useState(0);
+    const [minute, setMinute] = useState(0);
+    const [second, setSecond] = useState(0);
+    const [expireTime, setExpireTime] = useState(false);
+    const { dealDaily } = useSelector((s) => s.products);
 
-    const fetchDealDaily = async () => {
-        const response = await apiGetProducts({ sort: "-totalRatings", limit: 20 })
-        if (response.success) {
-            const pr = response.products[Math.round(Math.random() * 20)]
-            dispatch(
-                getDealDaily({ data: pr, time: Date.now() + 24 * 60 * 60 * 1000 })
-            )
-        }
-    }
+    const fetchRandomProduct = async () => {
+        const response = await apiGetProducts({ sort: "-totalRatings", limit: 20 });
+        return response.products[Math.round(Math.random() * 20)];
+    };
+
+
+
+    const updateDealDaily = async (product) => {
+        dispatch(getDealDaily({ data: product, time: Date.now() + 24 * 60 * 60 * 1000 }));
+    };
+    const fetchDealDaily = useCallback(async () => {
+        const product = await fetchRandomProduct();
+        updateDealDaily(product);
+    }, [dispatch]);
+
     useEffect(() => {
         if (dealDaily?.time) {
-            const deltaTime = dealDaily.time - Date.now()
-            const number = secondsToHms(deltaTime)
-            setHour(number.h)
-            setMinute(number.m)
-            setSecond(number.s)
+            const deltaTime = dealDaily.time - Date.now();
+            const { h, m, s } = secondsToHms(deltaTime);
+            setHour(h);
+            setMinute(m);
+            setSecond(s);
         }
-    }, [dealDaily])
+    }, [dealDaily]);
+
     useEffect(() => {
-        idInterval && clearInterval(idInterval)
-        if (moment(moment(dealDaily?.time).format("MM/DD/YYYY")).isBefore(moment()))
-            fetchDealDaily()
-    }, [expireTime])
+        // if (moment(dealDaily?.time).isBefore(moment())) 
+        fetchDealDaily();
+        //}
+    }, [expireTime, fetchDealDaily]);
+
     useEffect(() => {
+        let idInterval;
         idInterval = setInterval(() => {
-            if (second > 0) setSecond(prev => prev - 1)
-            else {
+            if (second > 0) {
+                setSecond((prev) => prev - 1);
+            } else {
                 if (minute > 0) {
-                    setMinute(prev => prev - 1)
-                    setSecond(59)
+                    setMinute((prev) => prev - 1);
+                    setSecond(59);
                 } else {
                     if (hour > 0) {
-                        setHour(prev => prev - 1)
-                        setMinute(59)
-                        setSecond(59)
+                        setHour((prev) => prev - 1);
+                        setMinute(59);
+                        setSecond(59);
                     } else {
-                        setExpireTime(!expireTime)
+                        setExpireTime(!expireTime);
                     }
                 }
             }
-        }, 1000)
+        }, 1000);
         return () => {
-            clearInterval(idInterval)
-        }
-    }, [second, minute, hour, expireTime])
+            clearInterval(idInterval);
+        };
+    }, [second, minute, hour, expireTime]);
+
     return (
         <div className="border w-full flex-auto">
             <div className="flex items-center justify-between p-4 w-full">
@@ -71,7 +82,7 @@ const DealDaily = ({ dispatch }) => {
             </div>
             <div className="w-full flex flex-col items-center pt-8 px-4 gap-2">
                 <img
-                    src={dealDaily?.data?.thumb || 'https://3qleather.com/wp-content/themes/olympusinn/assets/images/default-placeholder.png'}
+                    src={dealDaily?.data?.thumb || 'https://3qleather.com/wp-content/themes/olympusinn/assets/images/default-placeholder.png'}// cái deal dalily là thời gian mà đâu có hình ảnh gì đâu mà bỏ vô
                     alt=""
                     className="w-full object-contain"
                 />
@@ -95,9 +106,8 @@ const DealDaily = ({ dispatch }) => {
                     <span>Options</span>
                 </button>
             </div>
-
         </div>
-    )
-}
+    );
+};
 
-export default withBaseComponent(memo(DealDaily))
+export default withBaseComponent(memo(DealDaily));

@@ -105,7 +105,7 @@ const CreateProducts = () => {
     // };
 
     return (
-        <div className='w-full'>
+        <div className='w-full bg-gradient-to-tr from-green-500 to-green-200'>
             <h1 className='h-[75px] flex justify-between items-center text-3xl font-bold px-4 border-b border-gray-300'>
                 <span>Create New Product</span>
             </h1>

@@ -66,7 +66,7 @@ const ManageUser = () => {
     }
 
     return (
-        <div className={clsx('w-full', editElm && 'pl-20')}>
+        <div className={clsx('bg-gradient-to-tr from-green-500 to-green-200 w-full', editElm && 'pl-20')}>
             <h1 className='h-[75px] flex justify-between items-center text-3xl font-bold px-4 border-b border-gray-300'>
                 <span>Manage users</span>
             </h1>
@@ -208,6 +208,7 @@ const ManageUser = () => {
                         totalCount={users?.counts}
                     />
                 </div>
+                <div className=' h-[300px]'></div>
             </div>
         </div>
     )

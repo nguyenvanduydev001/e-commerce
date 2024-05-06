@@ -73,7 +73,7 @@ const ManageProducts = () => {
     };
 
     return (
-        <div className='w-full flex flex-col gap-4 relative'>
+        <div className='w-full flex h-[735px] flex-col gap-4 relative bg-gradient-to-tr from-yellow-500 to-yellow-200'>
             {editProduct && <div className='absolute inset-0 min-h-screen z-50 bg-[#e5e7eb]'>
                 <UpdateProduct
                     editProduct={editProduct}
@@ -88,11 +88,11 @@ const ManageProducts = () => {
                     setCustomizeVarriant={setCustomizeVarriant}
                 />
             </div>}
-            <div className='h-[69px] w-full'></div>
-            <div className='p-4 border-b w-full bg-[#e5e7eb] flex justify-between items-center border-gray-300 fixed top-0'>
+            {/* <div className='h-[69px] w-full'></div> */}
+            {/* <div className='p-4 border-b w-full bg-[#e5e7eb] flex justify-between items-center border-gray-300 fixed top-0'>
                 <h1 className='text-3xl font-bold tracking-tight'>Manage prodcuts</h1>
-            </div>
-            <div className='flex w-full justify-end items-center px-4 pt-4 pb-4'>
+            </div> */}
+            <div className='flex w-full  justify-end items-center px-4 pt-4 pb-4'>
                 <form className='w-[45%]'>
                     <InputFrom
                         id='q'
@@ -150,7 +150,7 @@ const ManageProducts = () => {
                     ))}
                 </tbody>
             </table>
-            <div className='w-full flex justify-end '>
+            <div className='w-full mt-[27px] flex justify-end '>
                 <Pagination totalCount={counts} />
             </div>
         </div>

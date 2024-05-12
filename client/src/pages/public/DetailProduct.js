@@ -144,8 +144,8 @@ const DetailProduct = ({ isQuickView, data, location, dispatch, navigate }) => {
         else toast.error(response.mes)
     }
     return (
-        <div className={clsx('w-full')}>
-            {!isQuickView && <div className='h-[81px] flex justify-center items-center bg-gray-100'>
+        <div className={clsx('w-full z-50')}>
+            {!isQuickView && <div className=' h-[81px] z-50 flex justify-center items-center bg-gray-100'>
                 <div className='w-main'>
                     <h3 ref={titleRef} className='font-semibold'>{currentProduct.title || product?.title}</h3>
                     <Breadcrumd title={currentProduct.title || product?.title} category={category} />
@@ -202,7 +202,7 @@ const DetailProduct = ({ isQuickView, data, location, dispatch, navigate }) => {
                                 <img src={product?.thumb} alt="thumb" className='w-8 h-8 rounded-md object-cover' />
                                 <span className='flex flex-col'>
                                     <span>{product?.color}</span>
-                                    <span className='text-sm'>{product?.price}</span>
+                                    <span className='text-sm'>{formatMoney(product?.price) + ' VND'}</span>
                                 </span>
                             </div>
                             {product?.varriants?.map(el => (

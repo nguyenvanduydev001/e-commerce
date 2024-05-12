@@ -41,10 +41,14 @@ const Personal = ({ navigate }) => {
     }
     return (
         <div className='w-full relative px-4'>
-            <header className='text-3xl font-semibold py-4 border-b border-[#ee3131]'>
-                Personal
-            </header>
             <form onSubmit={handleSubmit(handleUpdateInfor)} className='w-3/5 mx-auto py-8 flex flex-col gap-4'>
+                <div className='flex flex-col gap-2 items-center'>
+                    <span className='font-medium'>Profile image:</span>
+                    <label htmlFor="file">
+                        <img src={current?.avatar || avatar} alt="avatar" className='w-20 h-20 ml-8 object-cover rounded-full border' />
+                    </label>
+                    <input type="file" id='file' {...register('avatar')} hidden multiple={false} />
+                </div>
                 <InputFrom
                     label='Firstname'
                     register={register}
@@ -107,13 +111,7 @@ const Personal = ({ navigate }) => {
                     <span className='font-medium'>Created At:</span>
                     <span>{moment(current?.createdAt).fromNow()}</span>
                 </div>
-                <div className='flex flex-col gap-2'>
-                    <span className='font-medium'>Profile image:</span>
-                    <label htmlFor="file">
-                        <img src={current?.avatar || avatar} alt="avatar" className='w-20 h-20 ml-8 object-cover rounded-full' />
-                    </label>
-                    <input type="file" id='file' {...register('avatar')} hidden />
-                </div>
+
                 {isDirty && <div className='w-full flex justify-end'><Button type='submit'>Update information</Button></div>}
             </form>
         </div >

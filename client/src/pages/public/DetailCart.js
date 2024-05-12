@@ -10,6 +10,7 @@ import path from "utils/path";
 
 const DetailCart = ({ location, navigate }) => {
     const { currentCart, current } = useSelector(state => state.user)
+
     console.log(location.pathname)
     const handleSubmit = () => {
         if (!current?.address) return Swal.fire({
@@ -28,18 +29,13 @@ const DetailCart = ({ location, navigate }) => {
                 });
             }
         });
-        else window.open(`/${path.CHECKOUT}`, '_blank')
+        else window.open(`/${path.CHECKOUT}`, '_self')
     }
     console.log(currentCart)
     return (
         <div className="w-full relative px-4">
-            <div className='h-[81px] flex justify-center items-center bg-gray-100'>
-                <div className='w-full'>
-                    <h3 className='text-3xl font-semibold py-4 border-b border-[#ee3131]'>My Cart</h3>
-                </div>
-            </div>
-            <div className="flex flex-col border my-8 w-full mx-auto rounded-md drop-shadow">
-                <div className="bg-main  text-white w-full mx-auto border-b font-bold py-3 grid grid-cols-10">
+            <div className="flex flex-col border my-8 w-full mx-auto rounded-md bg-white ">
+                <div className="w-full mx-auto border-b font-semibold py-3 grid grid-cols-10 uppercase">
                     <span className="col-span-6 w-full text-center">Products</span>
                     <span className="col-span-1 w-full text-center">Quantity</span>
                     <span className="col-span-3 w-full text-center">Price</span>
@@ -55,14 +51,14 @@ const DetailCart = ({ location, navigate }) => {
                         pid={el.product?._id}
                     />
                 ))}
-            </div>
-            <div className="w-main mx-auto flex flex-col justify-center mb-12 items-end gap-3">
-                <span className="flex items-center gap-8 text-sm">
-                    <span>Subtotal:</span>
-                    <span className="text-main font-bold">{formatMoney(currentCart.reduce((sum, el) => sum + Number(el?.price) * el.quantity, 0)) + ' VND'}</span>
-                </span>
-                <span className="text-xs italic">Shipping, taxes, and discounts calculated at checkout</span>
-                <Button handleOnClick={handleSubmit}>Checkout ➡</Button>
+                <div className="w-main mx-auto flex flex-col justify-center mt-3 mb-3 items-end gap-3">
+                    <span className="flex items-center gap-8 text-sm">
+                        <span>Subtotal:</span>
+                        <span className="text-lg font-bold">{formatMoney(currentCart.reduce((sum, el) => sum + Number(el?.price) * el.quantity, 0)) + ' VND'}</span>
+                    </span>
+                    <span className="text-xs italic">Shipping, taxes, and discounts calculated at checkout</span>
+                    <Button handleOnClick={handleSubmit}>Checkout </Button>
+                </div>
             </div>
         </div>
 

@@ -9,7 +9,10 @@ import { showModal } from 'store/app/appSlice'
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { validate } from 'utils/helpers';
-import logo from '../../assets/logo.png'
+import logo from '../../assets/logo_truong.png'
+import banner from '../../assets/background.png'
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
+
 
 const Login = () => {
     const navigate = useNavigate();
@@ -81,6 +84,7 @@ const Login = () => {
         setIsVerifiedEmail(false)
         setToken('')
     }
+    const [showPassword, setShowPassword] = useState(false);
 
     return (
         <div className='w-screen h-screen relative'>
@@ -126,79 +130,85 @@ const Login = () => {
                     </div>
                 </div>
             </div>}
-            {/* <img
-                src="https://eminence.ch/wp-content/uploads/2023/08/commerce-tips-2022.jpg"
-                alt=""
-                className='w-full h-full object-cover'
-            /> */}
-            <div className='bg-black'>
-            </div>
-            <div className='bg-gradient-to-br from-red-500 to-orange-200 flex justify-center items-center h-screen'>
-                <div className='p-8 bg-white shadow-xl border flex flex-col items-center rounded-md min-w-[500px]'>
-                    <img className='py-3' src={logo} alt="logo" />
-                    <h1 className='text-[28px] font-semibold text-main mb-8'>{isRegister ? 'Register' : 'Login'}</h1>
-                    {isRegister &&
-                        <div className='flex items-center gap-2'>
-                            <InputField
-                                value={payload.firstname}
-                                setValue={setPayload}
-                                nameKey='firstname'
-                                invalidFields={invalidFields}
-                                setInvalidFieds={setInvalidFieds}
+
+            <div className='' style={{ background: `url(${banner}) no-repeat`, backgroundSize: 'cover', objectFit: 'cover' }}>
+                <div className=' flex justify-center items-center h-screen'>
+                    <div className='p-8 bg-white shadow-xl border flex flex-col items-center ml-[1000px] rounded-md min-w-[500px]'>
+                        <img className='py-3' src={logo} alt="logo" />
+                        <h1 className='text-[28px] font-semibold text-main mb-8'>{isRegister ? 'Register' : 'Login'}</h1>
+                        {isRegister &&
+                            <div className='flex items-center gap-2'>
+                                <InputField
+                                    value={payload.firstname}
+                                    setValue={setPayload}
+                                    nameKey='firstname'
+                                    invalidFields={invalidFields}
+                                    setInvalidFieds={setInvalidFieds}
+                                />
+                                <InputField
+                                    value={payload.lastname}
+                                    setValue={setPayload}
+                                    nameKey='lastname'
+                                    invalidFields={invalidFields}
+                                    setInvalidFieds={setInvalidFieds}
+                                />
+                            </div>
+                        }
+                        <InputField
+                            value={payload.email}
+                            setValue={setPayload}
+                            nameKey='email'
+                            invalidFields={invalidFields}
+                            setInvalidFieds={setInvalidFieds}
+
+                        />
+                        {isRegister && <InputField
+                            value={payload.mobile}
+                            setValue={setPayload}
+                            nameKey='mobile'
+                            invalidFields={invalidFields}
+                            setInvalidFieds={setInvalidFieds}
+                        />}
+                        <div className="relative w-full flex">
+                            <input
+                                value={payload.password}
+                                onChange={(e) => setPayload({ ...payload, password: e.target.value })}
+                                type={showPassword ? "text" : "password"}
+                                className="px-4 py-2 rounded-sm border w-full mt-2 placeholder:text-sm placeholder:italic outline-none"
+                                placeholder='Password'
                             />
-                            <InputField
-                                value={payload.lastname}
-                                setValue={setPayload}
-                                nameKey='lastname'
-                                invalidFields={invalidFields}
-                                setInvalidFieds={setInvalidFieds}
-                            />
+                            <button
+                                type="button"
+                                className="absolute top-[28px] right-2 transform -translate-y-1/2"
+                                onClick={() => setShowPassword(!showPassword)}
+                            >
+                                {showPassword ? <FaEyeSlash className="w-5 h-5 text-gray-400" /> : <FaEye className="w-5 h-5 text-gray-400" />}
+                            </button>
                         </div>
-                    }
-                    <InputField
-                        value={payload.email}
-                        setValue={setPayload}
-                        nameKey='email'
-                        invalidFields={invalidFields}
-                        setInvalidFieds={setInvalidFieds}
-                    />
-                    {isRegister && <InputField
-                        value={payload.mobile}
-                        setValue={setPayload}
-                        nameKey='mobile'
-                        invalidFields={invalidFields}
-                        setInvalidFieds={setInvalidFieds}
-                    />}
-                    <InputField
-                        value={payload.password}
-                        setValue={setPayload}
-                        nameKey='password'
-                        type='password'
-                        invalidFields={invalidFields}
-                        setInvalidFieds={setInvalidFieds}
-                    />
-                    <Button
-                        handleOnClick={handleSubmit}
-                        fw
-                    >
-                        {isRegister ? 'Register' : 'Login'}
-                    </Button>
-                    <div className='flex items-center justify-between my-2 w-full text-sm'>
-                        {!isRegister && <span onClick={() => setIsForgotPassword(true)} className='text-blue-500 hover:underline cursor-pointer'>Forgot your account?</span>}
-                        {!isRegister && <span
-                            className='text-blue-500 hover:underline cursor-pointer'
-                            onClick={() => setIsRegister(true)}
+
+                        <Button
+                            handleOnClick={handleSubmit}
+                            fw
                         >
-                            Create account
-                        </span>}
-                        {isRegister && <span
-                            className='text-blue-500 hover:underline cursor-pointer w-full text-center'
-                            onClick={() => setIsRegister(false)}
-                        >
-                            Go login
-                        </span>}
+                            {isRegister ? 'Register' : 'Login'}
+                        </Button>
+                        <div className='flex items-center justify-between my-2 w-full text-sm'>
+                            {!isRegister && <span onClick={() => setIsForgotPassword(true)} className='text-blue-500 hover:underline cursor-pointer'>Forgot your account?</span>}
+                            {!isRegister && <span
+                                className='text-blue-500 hover:underline cursor-pointer'
+                                onClick={() => setIsRegister(true)}
+                            >
+                                Create account
+                            </span>}
+                            {isRegister && <span
+                                className='text-blue-500 hover:underline cursor-pointer w-full text-center'
+                                onClick={() => setIsRegister(false)}
+                            >
+                                Go login
+                            </span>}
+                        </div>
+                        <Link className='text-blue-500 text-sm hover:underline cursor-pointer w-full text-center' to={`/${path.HOME}`}>Go home?</Link>
                     </div>
-                    <Link className='text-blue-500 text-sm hover:underline cursor-pointer w-full text-center' to={`/${path.HOME}`}>Go home?</Link>
                 </div>
             </div>
         </div>

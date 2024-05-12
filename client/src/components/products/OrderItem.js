@@ -21,15 +21,15 @@ const OrderItem = ({ dispatch, color, dfQuantity = 1, price, title, thumbnail, p
         <div className="w-main mx-auto border-b font-bold py-3 grid grid-cols-10">
             <span className="col-span-6 w-full text-center">
                 <div className='flex gap-2 px-4 py-3'>
-                    <img src={thumbnail} alt="thumb" className='w-28 h-28 object-cover' />
-                    <div className='flex flex-col items-start gap-1'>
-                        <span className='text-sm text-main'>{title}</span>
-                        <span className='text-[10px] font-main'>{color}</span>
+                    <img src={thumbnail} alt="thumb" className='w-40 h-40 object-cover' />
+                    <div className='flex flex-col items-start gap-1 mt-[50px] ml-5'>
+                        <span className='font-main font-normal hover:text-main'>{title}</span>
+                        <span className='text-[10px] font-normal'>{color}</span>
                     </div>
                 </div>
             </span>
             <span className="col-span-1 w-full text-center">
-                <div className="flex items-center h-full">
+                <div className="flex items-center h-full ml-[14px]">
                     <SelectQuantity
                         quantity={quantity}
                         handleQuantity={handleQuantity}
@@ -37,8 +37,8 @@ const OrderItem = ({ dispatch, color, dfQuantity = 1, price, title, thumbnail, p
                     />
                 </div>
             </span>
-            <span className="col-span-3 w-full h-full flex items-center justify-center text-center">
-                <span className='text-lg'>{formatMoney(price * quantity) + ' VND'}</span>
+            <span className="col-span-3 w-full h-full font-semibold flex items-center justify-center text-center">
+                <span className='text-lg semibold '>{formatMoney(price * quantity) + ' VND'}</span>
             </span>
         </div>
     )

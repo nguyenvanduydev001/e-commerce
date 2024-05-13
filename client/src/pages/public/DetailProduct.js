@@ -111,10 +111,13 @@ const DetailProduct = ({ isQuickView, data, location, dispatch, navigate }) => {
         if (flag === 'plus') setQuantity(prev => +prev + 1)
     }, [quantity])
 
-    const handleClickImage = (e, el) => {
-        e.stopPropagation()
+    const handleClickImage = (el) => {
         setCurrentImage(el)
+        console.log('Image element:', el);
+        console.log('Updated currentImage:', currentImage);
     }
+
+
     const handleAddToCart = async () => {
         if (!current) return Swal.fire({
             title: 'Almost...',
@@ -143,6 +146,7 @@ const DetailProduct = ({ isQuickView, data, location, dispatch, navigate }) => {
         }
         else toast.error(response.mes)
     }
+    console.log(currentProduct.images)
     return (
         <div className={clsx('w-full ')}>
             {!isQuickView && <div className=' h-[81px] z-50 flex justify-center items-center bg-gray-100'>
@@ -155,25 +159,21 @@ const DetailProduct = ({ isQuickView, data, location, dispatch, navigate }) => {
                 <div className={clsx('flex flex-col gap-4', isQuickView ? 'w-1/2' : 'w-2/5')}>
                     <div className='w-[458px] border flex items-center object-cover'>
                         {product && (
-                            <ReactImageZoom {...{
-                                border: 1,
-                                width: 458,
-                                height: 458,
-                                zoomWidth: 400,
-                                img: currentProduct.thumb || currentImage
-                            }} />
+                            <ReactImageZoom
+                                border={5}
+                                width={458}
+                                height={458}
+                                zoomWidth={400}
+                                img={currentImage || currentProduct.thumb}
+                            />
                         )}
+
                     </div>
                     <div className='w-[458px]'>
                         <Slider className='image-slider' {...settings}>
-                            {currentProduct.images.length === 0 && product?.images?.map(el => (
-                                <div className='flex-1' key={el}>
-                                    <img onClick={e => handleClickImage(e, el)} src={el} alt='sub-product' className='h-[143px] w-[143px] cursor-pointer border object-cover' />
-                                </div>
-                            ))}
-                            {currentProduct.images.length > 0 && currentProduct.images?.map(el => (
-                                <div className='flex-1' key={el}>
-                                    <img onClick={e => handleClickImage(e, el)} src={el} alt='sub-product' className='h-[143px] w-[143px] cursor-pointer border object-cover' />
+                            {currentProduct.images.map((el, index) => (
+                                <div className='flex-1' key={index}>
+                                    <img onClick={() => handleClickImage(el)} src={el} alt='sub-product' className='h-[143px] w-[143px] cursor-pointer border object-cover' />
                                 </div>
                             ))}
                         </Slider>

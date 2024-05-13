@@ -2,9 +2,9 @@ import React, { memo } from 'react';
 import { NavLink } from 'react-router-dom';
 import { createSlug } from 'utils/helpers';
 import { useSelector } from 'react-redux';
-import { SlScreenSmartphone, SlScreenTablet, SlPrinter,SlEarphones  } from "react-icons/sl";
+import { SlScreenSmartphone, SlScreenTablet, SlPrinter, SlEarphones } from "react-icons/sl";
 import { IoIosLaptop } from "react-icons/io";
-import { CiSpeaker,CiCamera } from "react-icons/ci";
+import { CiSpeaker, CiCamera } from "react-icons/ci";
 import { PiTelevisionLight } from "react-icons/pi";
 import { FaShoppingBag } from 'react-icons/fa';
 const Sidebar = () => {
@@ -24,7 +24,7 @@ const Sidebar = () => {
             case 'Camera':
                 return <CiCamera size={23} className='mr-[5px]' />;
             case 'Accessories':
-                return <SlEarphones  size={23} className='mr-[5px]' />;
+                return <SlEarphones size={23} className='mr-[5px]' />;
             case 'Television':
                 return <PiTelevisionLight size={23} className='mr-[5px]' />;
             case 'Printer':
@@ -44,9 +44,9 @@ const Sidebar = () => {
                         ? 'bg-main text-white px-5 pt-[15px] pb-[14px] text-sm hover:text-main'
                         : 'px-5 pt-[15px] pb-[14px] text-sm hover:text-main'}
                 >
-                    <div className='flex'>
+                    <div className='flex items-center'>
                         {getIconByCategory(el.title)} {el.title}
-                    </div> {/* Sử dụng biểu tượng dựa trên loại sản phẩm */}
+                    </div>
                 </NavLink>
             ))}
         </div>

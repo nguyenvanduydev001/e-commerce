@@ -9,7 +9,7 @@ const Votebar = ({ number, ratingCount, ratingTotal }) => {
         percentRef.current.style.cssText = `right: ${100 - percent}%`
     }, [ratingCount, ratingTotal])
     return (
-        <div className='z-99 flex items-center gap-2 text-sm text-gray-500'>
+        <div className='z-[-10] flex items-center gap-2 text-sm text-gray-500'>
             <div className='flex w-[10%] items-center justify-center gap-1 text-sm'>
                 <span>{number}</span>
                 <AiFillStar color='orange' />

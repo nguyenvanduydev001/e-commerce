@@ -46,7 +46,7 @@ const Productinfomation = ({ totalRatings, ratings, nameProduct, pid, rerender }
     }
     return (
         <div>
-            <div className="flex z-99999 items-center gap-1 relative bottom-[-1px]">
+            <div className="flex z-[-10] items-center gap-1 relative bottom-[-1px]">
                 {productInfoTabs.map(el => (
                     <span
                         className={`py-2 px-4 cursor-pointer ${activedTab === +el.id ? 'bg-white border border-b-0' : 'bg-[#f1f1f1]'} `}

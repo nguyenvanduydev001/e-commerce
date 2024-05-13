@@ -148,16 +148,16 @@ const DetailProduct = ({ isQuickView, data, location, dispatch, navigate }) => {
     }
     console.log(currentProduct.images)
     return (
-        <div className={clsx('w-full ')}>
-            {!isQuickView && <div className=' h-[81px] z-50 flex justify-center items-center bg-gray-100'>
+        <div className={clsx('w-full')}>
+            {!isQuickView && <div className=' h-[81px]  flex justify-center items-center bg-gray-100'>
                 <div className='w-main'>
                     <h3 ref={titleRef} className='font-semibold'>{currentProduct.title || product?.title}</h3>
                     <Breadcrumd title={currentProduct.title || product?.title} category={category} />
                 </div>
             </div>}
-            <div onClick={e => e.stopPropagation()} className={clsx('bg-white m-auto mt-4 flex', isQuickView ? 'max-w-[900px] gap-16 p-4 max-h-[80vh] overflow-y-auto' : 'w-main')}>
+            <div onClick={e => e.stopPropagation()} className={clsx('bg-white  z-[-10] m-auto mt-4 flex', isQuickView ? 'max-w-[900px] gap-16 p-4 max-h-[80vh] overflow-y-auto' : 'w-main')}>
                 <div className={clsx('flex flex-col gap-4', isQuickView ? 'w-1/2' : 'w-2/5')}>
-                    <div className='w-[458px] border flex items-center object-cover'>
+                    <div className='w-[458px] z-[10] border flex items-center object-cover'>
                         {product && (
                             <ReactImageZoom
                                 border={5}

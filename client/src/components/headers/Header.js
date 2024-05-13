@@ -60,7 +60,7 @@ const Header = ({ dispatch }) => {
                             <FaUserCircle color='red' />
                             <span>Profile</span>
                             {isShowOption && (
-                                <div onClick={e => e.stopPropagation()} className='absolute flex flex-col top-[51px]  left-[-16px] bg-white border rounded-lg shadow-xl min-w-[150px] py-2'>
+                                <div onClick={e => e.stopPropagation()} className='absolute  flex flex-col top-[51px] z-10 left-[-16px] bg-white border rounded-lg shadow-xl min-w-[150px] py-2'>
                                     <Link className='p-2 w-full flex hover:bg-white hover:text-main hover:font-semibold' to={`/${path.MEMBER}/${path.PERSONAL}`}>
                                         <FaUser className='mr-[6px]' size={18} /> Personal
                                     </Link>

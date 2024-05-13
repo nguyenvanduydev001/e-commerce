@@ -4,7 +4,7 @@ import { FaShoppingCart, FaUsers, FaBoxOpen } from 'react-icons/fa'
 
 const Dashboard = () => {
     return (
-        <div className="min-h-screen bg-gradient-to-tr from-red-500 to-orange-200">
+        <div className="min-h-screen bg-white">
             <div className="container mx-auto px-4 py-8">
                 <h1 className="text-3xl font-bold mb-4">Dashboard</h1>
                 <div className="flex flex-wrap -mx-4">
@@ -16,7 +16,7 @@ const Dashboard = () => {
                             <p className="text-white text-lg">Total Sales: $12,567.89</p>
                             <p className="text-white text-lg">Today's Sales: $856.45</p>
                             <p className="text-white text-lg">Avg. Order Value: $125.67</p>
-                            <Link to="/member/buy-history" className="block mt-4 bg-white text-blue-500 py-2 px-4 rounded-lg">View Sales</Link>
+                            <Link to="#" className="block mt-4 bg-white text-blue-500 py-2 px-4 rounded-lg">View Sales</Link>
                         </div>
                     </div>
                     <div className="w-full xl:w-1/3 xl:p-6">

@@ -73,7 +73,7 @@ const CreateProducts = () => {
             } else toast.error(response.mes)
         }
     }
-    // const [notification, setNotification] = useState(null);
+    
     // const handleCreateProduct = async (data) => {
     //     const invalids = validate(payload, setInvalidFields);
     //     if (invalids === 0) {
@@ -105,10 +105,7 @@ const CreateProducts = () => {
     // };
 
     return (
-        <div className='w-full bg-gradient-to-tr from-green-500 to-green-200'>
-            <h1 className='h-[75px] flex justify-between items-center text-3xl font-bold px-4 border-b border-gray-300'>
-                <span>Create New Product</span>
-            </h1>
+        <div className='w-full bg-white'>
             <div className='p-4'>
                 <form onSubmit={handleSubmit(handleCreateProduct)}>
                     <InputFrom

@@ -26,6 +26,13 @@ exports.users = [
         firstname: 'Duy 4',
         lastname: 'Nguyen Van',
         mobile: '01234569844'
+    },
+    {
+        email: 'user_5@gmail.com',
+        password: 123456,
+        firstname: 'Duy 5',
+        lastname: 'Nguyen Van',
+        mobile: '01234569822'
     }
 ]
 

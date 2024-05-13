@@ -144,7 +144,7 @@ const DetailProduct = ({ isQuickView, data, location, dispatch, navigate }) => {
         else toast.error(response.mes)
     }
     return (
-        <div className={clsx('w-full z-50')}>
+        <div className={clsx('w-full ')}>
             {!isQuickView && <div className=' h-[81px] z-50 flex justify-center items-center bg-gray-100'>
                 <div className='w-main'>
                     <h3 ref={titleRef} className='font-semibold'>{currentProduct.title || product?.title}</h3>

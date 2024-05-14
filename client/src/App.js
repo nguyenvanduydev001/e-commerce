@@ -25,7 +25,6 @@ import {
   MemberLayout,
   Personal,
   History,
-  MyCart,
   Wishlist,
   Checkout
 } from 'pages/member'
@@ -79,8 +78,8 @@ function App() {
         <Route path={path.LOGIN} element={<Login />} />
       </Routes>
       <ToastContainer
-        position="top-right"
-        autoClose={5000}
+        position="top-center"
+        autoClose={1000}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
@@ -88,9 +87,8 @@ function App() {
         pauseOnFocusLoss
         draggable
         pauseOnHover
-        theme="light"
+        theme="colored"
       />
-      {/* Same as */}
       <ToastContainer />
     </div>
   );

@@ -80,23 +80,23 @@ const ManageUser = () => {
                 </div>
                 <form className={editElm ? 'w-1160' : ''} onSubmit={handleSubmit(handleUpdate)}>
                     {editElm && <Button type='submit'>Update</Button>}
-                    <table className='table-auto mb-6 text-left w-full '>
-                        <thead className='font-bold bg-gray-700 text-[13px] text-white'>
-                            <tr className='border border-gray-500'>
-                                <th className='px-4 py-2'>#</th>
-                                <th className='px-4 py-2'>Email address</th>
-                                <th className='px-4 py-2'>Firstname</th>
-                                <th className='px-4 py-2'>Lastname</th>
-                                <th className='px-4 py-2'>Role</th>
-                                <th className='px-4 py-2'>Phone</th>
-                                <th className='px-4 py-2'>Status</th>
-                                <th className='px-4 py-2'>Created At</th>
-                                <th className='px-4 py-2'>Actions</th>
+                    <table className='table-auto mb-6 text-left w-full rounded shadow-md'>
+                        <thead className='font-bold bg-main text-[13px] text-white rounded- shadow-md'>
+                            <tr>
+                                <th className='px-4 py-2 uppercase'>Id</th>
+                                <th className='px-4 py-2 uppercase'>Email address</th>
+                                <th className='px-4 py-2 uppercase'>Firstname</th>
+                                <th className='px-4 py-2 uppercase'>Lastname</th>
+                                <th className='px-4 py-2 uppercase'>Role</th>
+                                <th className='px-4 py-2 uppercase'>Phone</th>
+                                <th className='px-4 py-2 uppercase'>Status</th>
+                                <th className='px-4 py-2 uppercase'>Created At</th>
+                                <th className='px-4 py-2 uppercase'>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             {users?.users?.map((el, idx) => (
-                                <tr key={el._id} className='border border-gray-500'>
+                                <tr key={el._id} className='border-b'>
                                     <td className='py-2 px-4'>{idx + 1}</td>
                                     <td className='py-2 px-4 '>
                                         {editElm?._id === el._id

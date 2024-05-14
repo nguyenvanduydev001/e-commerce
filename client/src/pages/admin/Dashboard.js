@@ -80,11 +80,11 @@ class Dashboard extends PureComponent {
                         <div className="w-full xl:w-1/3 xl:p-6">
                             <div className="bg-blue-500 shadow-md rounded-lg p-6">
                                 <h2 className="text-white flex items-center text-2xl font-bold mb-2">
-                                    evaluate Overview <FaShoppingCart className='ml-[8px]' />
+                                    Evaluate Overview <FaShoppingCart className='ml-[8px]' />
                                 </h2>
-                                <p className="text-white text-lg">Total evaluate: $12,567.89</p>
-                                <p className="text-white text-lg">Today's evaluate: $856.45</p>
-                                <p className="text-white text-lg">Avg. Order Value: $125.67</p>
+                                <p className="text-white text-lg">Total evaluate: 20</p>
+                                <p className="text-white text-lg">Today's evaluate: 1</p>
+                                <p className="text-white text-lg">Avg. Order Value: 450,000 VND</p>
                                 <Link to="#" className="block mt-4 bg-white text-blue-500 py-2 px-4 rounded-lg">View evaluate</Link>
                             </div>
                         </div>
@@ -93,8 +93,8 @@ class Dashboard extends PureComponent {
                                 <h2 className="text-white flex items-center text-2xl font-bold mb-2">
                                     Customer Overview <FaUsers className='ml-[8px]' />
                                 </h2>
-                                <p className="text-white text-lg">Total Customers: 5,678</p>
-                                <p className="text-white text-lg">New Customers Today: 45</p>
+                                <p className="text-white text-lg">Total Customers: 4</p>
+                                <p className="text-white text-lg">New Customers Today: 0</p>
                                 <p className="text-white text-lg">Customer Retention Rate: 75%</p>
                                 <Link to="/admin/manage-user" className="block mt-4 bg-white text-green-500 py-2 px-4 rounded-lg">View Customers</Link>
                             </div>
@@ -104,9 +104,9 @@ class Dashboard extends PureComponent {
                                 <h2 className="text-white flex items-center text-2xl font-bold mb-2">
                                     Product Overview <FaBoxOpen className='ml-[8px]' />
                                 </h2>
-                                <p className="text-white text-lg">Total Products: 67</p>
+                                <p className="text-white text-lg">Total Products: 68</p>
                                 <p className="text-white text-lg">Best Selling Product: "Tablet"</p>
-                                <p className="text-white text-lg">Out of Stock Products: 25</p>
+                                <p className="text-white text-lg">Out of Stock Products: 4</p>
                                 <Link to="/admin/manage-products" className="block mt-4 bg-white text-yellow-500 py-2 px-4 rounded-lg">View Products</Link>
                             </div>
                         </div>
@@ -124,7 +124,7 @@ class Dashboard extends PureComponent {
                                 }}
                             >
                                 <CartesianGrid stroke="#f5f5f5" />
-                                <XAxis dataKey="name" scale="band" />
+                                <XAxis className='ml-[12px]' dataKey="name" scale="band" />
                                 <YAxis />
                                 <Tooltip />
                                 <Legend />

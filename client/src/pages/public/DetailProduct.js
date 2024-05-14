@@ -214,7 +214,7 @@ const DetailProduct = ({ isQuickView, data, location, dispatch, navigate }) => {
                                     <img src={el.thumb} alt="thumb" className='w-8 h-8 rounded-md object-cover' />
                                     <span className='flex flex-col'>
                                         <span>{el.color}</span>
-                                        <span className='text-sm'>{el.price}</span>
+                                        <span className='text-sm'>{formatMoney(el.price) + ' VND'}</span>
                                     </span>
                                 </div>
                             ))}

@@ -19,8 +19,8 @@ const Pagination = ({ totalCount }) => {
 
     return (
         <div className='flex w-full justify-between items-center'>
-            {!+params.get('page') ? <span className='text-sm italic'>{`Show products ${Math.min(totalCount, 1)} - ${Math.min(+process.env.REACT_APP_LIMIT, totalCount)} of ${totalCount}`}</span> : ''}
-            {+params.get('page') ? <span className='text-sm italic'>{`Show products ${range()} of ${totalCount}`}</span> : ''}
+            {!+params.get('page') ? <span className='text-sm italic'>{`Show ${Math.min(totalCount, 1)} - ${Math.min(+process.env.REACT_APP_LIMIT, totalCount)} of ${totalCount}`}</span> : ''}
+            {+params.get('page') ? <span className='text-sm italic'>{`Show ${range()} of ${totalCount}`}</span> : ''}
             <div className='flex items-center'>
                 {pagination?.map(el => (
                     <PagiItem key={el}>

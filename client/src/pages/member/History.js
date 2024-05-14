@@ -1,5 +1,4 @@
-import { render } from "@testing-library/react";
-import { apiDeleteOrders, apiGetUserOrders } from "apis";
+import { apiGetUserOrders } from "apis";
 import { CustomSelect, InputFrom, Pagination } from "components";
 import withBaseComponent from "hocs/withBaseComponent";
 import moment from "moment";

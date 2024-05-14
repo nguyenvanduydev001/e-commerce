@@ -64,7 +64,6 @@ const getProducts = asyncHanler(async (req, res) => {
                 { title: { $regex: queries.q, $options: 'i' } },
                 { category: { $regex: queries.q, $options: 'i' } },
                 { brand: { $regex: queries.q, $options: 'i' } },
-                // { description: { $regex: queries.q, $options: 'i' } },
             ]
         }
     }

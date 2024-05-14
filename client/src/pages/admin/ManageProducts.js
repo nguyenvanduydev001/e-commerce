@@ -73,7 +73,7 @@ const ManageProducts = () => {
     };
 
     return (
-        <div className='w-full flex h-full flex-col gap-4 relative bg-white'>
+        <div className='w-full flex h-full flex-col gap-4 relative bg-white px-4'>
             {editProduct && <div className='absolute inset-0 min-h-screen z-50 bg-[#e5e7eb]'>
                 <UpdateProduct
                     editProduct={editProduct}
@@ -88,7 +88,7 @@ const ManageProducts = () => {
                     setCustomizeVarriant={setCustomizeVarriant}
                 />
             </div>}
-            <div className='flex w-full  justify-end items-center px-4 pt-4 pb-4'>
+            <div className='flex w-full justify-end items-center px-4 pt-4 pb-4'>
                 <form className='w-[45%]'>
                     <InputFrom
                         id='q'
@@ -99,9 +99,9 @@ const ManageProducts = () => {
                     />
                 </form>
             </div>
-            <table className='table-auto '>
+            <table className='table-auto border shadow-md'>
                 <thead>
-                    <tr className='border bg-sky-900 text-white border-white'>
+                    <tr className='border bg-main text-white shadow-md'>
                         <th className='text-center py-2'>Order</th>
                         <th className='text-center py-2'>Thumb</th>
                         <th className='text-center py-2'>Title</th>

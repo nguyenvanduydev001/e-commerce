@@ -1,108 +1,113 @@
-import React, { useCallback, useEffect, useState, } from 'react'
-import { InputFrom, Select, Button, MarkdownEditor, Loading } from 'components'
-import { useForm } from 'react-hook-form'
-import { useSelector, useDispatch } from 'react-redux'
-import { validate, getBase64 } from 'utils/helpers'
-import { toast } from 'react-toastify';
-import { apiCreateProduct } from 'apis'
-import { showModal } from 'store/app/appSlice'
+import React, { useCallback, useEffect, useState } from 'react';
+import { InputFrom, Select, Button, MarkdownEditor, Loading } from 'components';
+import { useForm } from 'react-hook-form';
+import { useSelector, useDispatch } from 'react-redux';
+import { getBase64 } from 'utils/helpers';
+import { apiCreateProduct } from 'apis';
+import { showModal } from 'store/app/appSlice';
+
+const validate = (payload, setInvalidFields) => {
+    let invalids = 0;
+    const invalidFields = [];
+
+    Object.entries(payload).forEach(([key, value]) => {
+        if (typeof value === 'string' && value.trim() === '') {
+            invalidFields.push(key);
+            invalids++;
+        } else if (Array.isArray(value) && value.length === 0) {
+            invalidFields.push(key);
+            invalids++;
+        } else if (!value) {
+            invalidFields.push(key);
+            invalids++;
+        }
+    });
+
+    setInvalidFields(invalidFields);
+    return invalids;
+};
 
 const CreateProducts = () => {
-    const { categories } = useSelector(state => state.app)
-    const dispatch = useDispatch()
-    const { register, formState: { errors }, reset, handleSubmit, watch } = useForm()
+    const { categories } = useSelector(state => state.app);
+    const dispatch = useDispatch();
+    const { register, formState: { errors }, reset, handleSubmit, watch } = useForm();
 
     const [payload, setPayload] = useState({
         description: ''
-    })
+    });
     const [preview, setPreview] = useState({
         thumb: null,
         images: []
-    })
-    const [invalidFields, setInvalidFields] = useState([])
+    });
+    const [invalidFields, setInvalidFields] = useState([]);
+    const [notification, setNotification] = useState(null);
+    const [isLoading, setIsLoading] = useState(false); // Thêm trạng thái isLoading
     const changeValue = useCallback((e) => {
-        setPayload(e)
-    }, [payload])
-    const [hoverElm, setHoverElm] = useState(null)
-    const handlePreviewThumb = async (file) => {
-        const base64Thumb = await getBase64(file)
-        setPreview(prev => ({ ...prev, thumb: base64Thumb }))
-    }
-    const handlePreviewImages = async (files) => {
-        const imagesPreview = []
-        for (let file of files) {
-            console.log(file)
-            if (file.type !== 'image/png' && file.type !== 'image/jpg') {
-                toast.warning('File not supported!')
-                return
-            }
-            const base64 = await getBase64(file)
-            imagesPreview.push({ name: file.name, path: base64 })
-        }
-        setPreview(prev => ({ ...prev, images: imagesPreview }))
-    }
-    useEffect(() => {
-        handlePreviewThumb(watch('thumb')[0])
-    }, [watch('thumb')])
-    useEffect(() => {
-        handlePreviewImages(watch('images'))
-    }, [watch('images')])
+        setPayload(e);
+    }, [payload]);
 
+    const handlePreviewThumb = async (file) => {
+        const base64Thumb = await getBase64(file);
+        setPreview(prev => ({ ...prev, thumb: base64Thumb }));
+    };
+
+    const handlePreviewImages = async (files) => {
+        const imagesPreview = [];
+        for (let file of files) {
+            if (file.type !== 'image/png' && file.type !== 'image/jpg') {
+                setNotification('File not supported!');
+                return;
+            }
+            const base64 = await getBase64(file);
+            imagesPreview.push({ name: file.name, path: base64 });
+        }
+        setPreview(prev => ({ ...prev, images: imagesPreview }));
+    };
+
+    useEffect(() => {
+        handlePreviewThumb(watch('thumb')[0]);
+    }, [watch('thumb')]);
+
+    useEffect(() => {
+        handlePreviewImages(watch('images'));
+    }, [watch('images')]);
+
+    useEffect(() => {
+        if (notification) {
+            const timer = setTimeout(() => {
+                setNotification(null);
+            }, 3000); // 3 giây
+
+            return () => clearTimeout(timer);
+        }
+    }, [notification]);
 
     const handleCreateProduct = async (data) => {
-        const invalids = validate(payload, setInvalidFields)
+        const invalids = validate(payload, setInvalidFields);
         if (invalids === 0) {
-            if (data.category) data.category = categories?.find(el => el._id === data.category)?.title
-            const finalPayload = { ...data, ...payload }
-            const formData = new FormData()
-            for (let i of Object.entries(finalPayload)) formData.append(i[0], i[1])
-            if (finalPayload.thumb) formData.append('thumb', finalPayload.thumb[0])
+            if (data.category) data.category = categories?.find(el => el._id === data.category)?.title;
+            const finalPayload = { ...data, ...payload };
+            const formData = new FormData();
+            for (let i of Object.entries(finalPayload)) formData.append(i[0], i[1]);
+            if (finalPayload.thumb) formData.append('thumb', finalPayload.thumb[0]);
             if (finalPayload.images) {
-                for (let image of finalPayload.images) formData.append('images', image)
+                for (let image of finalPayload.images) formData.append('images', image);
             }
-            dispatch(showModal({ isShowModal: true, modalChildren: <Loading /> }))
-            const response = await apiCreateProduct(formData)
-            dispatch(showModal({ isShowModal: false, modalChildren: null }))
+            setIsLoading(true); // Đặt trạng thái isLoading thành true
+            const response = await apiCreateProduct(formData);
+            setIsLoading(false); // Đặt trạng thái isLoading thành false
             if (response.success) {
-                toast.success(response.mes)
-                reset()
+                setNotification(response.mes);
+                reset();
                 setPayload({
                     thumb: '',
                     image: []
-                })
-            } else toast.error(response.mes)
+                });
+            } else {
+                setNotification(response.mes);
+            }
         }
-    }
-    
-    // const handleCreateProduct = async (data) => {
-    //     const invalids = validate(payload, setInvalidFields);
-    //     if (invalids === 0) {
-    //         if (data.category) data.category = categories?.find(el => el._id === data.category)?.title;
-    //         const finalPayload = { ...data, ...payload };
-    //         const formData = new FormData();
-    //         for (let i of Object.entries(finalPayload)) formData.append(i[0], i[1]);
-    //         if (finalPayload.thumb) formData.append('thumb', finalPayload.thumb[0]);
-    //         if (finalPayload.images) {
-    //             for (let image of finalPayload.images) formData.append('images', image);
-    //         }
-    //         dispatch(showModal({ isShowModal: true, modalChildren: <Loading /> }));
-
-    //         try {
-    //             const response = await apiCreateProduct(formData);
-    //             if (response.success) {
-    //                 setNotification({ type: 'success', message: response.mes });
-    //                 reset();
-    //                 setPayload({ thumb: '', image: [] });
-    //             } else {
-    //                 setNotification({ type: 'error', message: response.mes });
-    //             }
-    //         } catch (error) {
-    //             setNotification({ type: 'error', message: 'An error occurred while processing your request.' });
-    //         } finally {
-    //             dispatch(showModal({ isShowModal: false, modalChildren: null }));
-    //         }
-    //     }
-    // };
+    };
 
     return (
         <div className='w-full bg-white'>
@@ -113,9 +118,7 @@ const CreateProducts = () => {
                         register={register}
                         errors={errors}
                         id='title'
-                        validate={{
-                            required: 'Need fill this field'
-                        }}
+                        validate={{ required: 'Need fill this field' }}
                         fullWidth
                         placeholder='Name of new product'
                     />
@@ -125,9 +128,7 @@ const CreateProducts = () => {
                             register={register}
                             errors={errors}
                             id='price'
-                            validate={{
-                                required: 'Need fill this field'
-                            }}
+                            validate={{ required: 'Need fill this field' }}
                             style='flex-auto'
                             placeholder='Price of new product'
                             type='number'
@@ -137,9 +138,7 @@ const CreateProducts = () => {
                             register={register}
                             errors={errors}
                             id='quantity'
-                            validate={{
-                                required: 'Need fill this field'
-                            }}
+                            validate={{ required: 'Need fill this field' }}
                             style='flex-auto'
                             placeholder='Quantity of new product'
                             type='number'
@@ -149,9 +148,7 @@ const CreateProducts = () => {
                             register={register}
                             errors={errors}
                             id='color'
-                            validate={{
-                                required: 'Need fill this field'
-                            }}
+                            validate={{ required: 'Need fill this field' }}
                             style='flex-auto'
                             placeholder='Color of new product'
                         />
@@ -162,7 +159,7 @@ const CreateProducts = () => {
                             options={categories?.map(el => ({ code: el._id, value: el.title }))}
                             register={register}
                             id='category'
-                            validate={{ required: 'Nedd fill this field' }}
+                            validate={{ required: 'Need fill this field' }}
                             style='flex-auto'
                             errors={errors}
                             fullWidth
@@ -181,8 +178,8 @@ const CreateProducts = () => {
                         name='description'
                         changeValue={changeValue}
                         label='Description'
-                        invalidFiedls={invalidFields}
-                        setInvaliFields={setInvalidFields}
+                        invalidFields={invalidFields}
+                        setInvalidFields={setInvalidFields}
                     />
                     <div className='flex flex-col gap-2 mt-8'>
                         <label className='font-semibold' htmlFor="thumb">Upload thumb</label>
@@ -204,7 +201,7 @@ const CreateProducts = () => {
                             multiple
                             {...register('images', { required: 'Need fill' })}
                         />
-                        {errors['images'] && <small className='text-xs text-red-500'>{errors['thumb']?.message}</small>}
+                        {errors['images'] && <small className='text-xs text-red-500'>{errors['images']?.message}</small>}
                     </div>
                     {preview.images.length > 0 && <div className='my-4 flex w-full gap-3 flex-wrap'>
                         {preview.images?.map((el, idx) => (
@@ -220,9 +217,11 @@ const CreateProducts = () => {
                         <Button type='submit'>Create new product</Button>
                     </div>
                 </form>
+                {notification && <div className='mt-4 text-center text-green-500'>{notification}</div>}
+                {isLoading && <div className='mt-4 text-center text-blue-500'>Loading...</div>}
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default CreateProducts 
+export default CreateProducts;

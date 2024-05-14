@@ -92,7 +92,7 @@ const Product = ({ productData, isNew, normal, navigate, dispatch, location, pid
                     <img
                         src={productData?.thumb || 'https://3qleather.com/wp-content/themes/olympusinn/assets/images/default-placeholder.png'}
                         alt=""
-                        className="w-[274px] h-[274px] object-cover"
+                        className="w-[274px] h-[274px] object-cover ml-[31px] "
                     />
                     {!normal && <img src={isNew ? label : trending} alt="" className="absolute w-[100px] h-[35px] top-[-0] right-[-0] object-cover" />}
                 </div>

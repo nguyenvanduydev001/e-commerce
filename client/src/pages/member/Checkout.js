@@ -21,9 +21,6 @@ const Checkout = ({ dispatch }) => {
             <Helmet>
                 <title>Checkout - Digital World</title>
             </Helmet>
-            {/* <div className="w-full flex justify-center items-center col-span-4">
-                <img src={payment} alt="payment" className="h-[70%] object-contain" />
-            </div> */}
             <div className="flex w-full flex-col justify-center gap-6 bg-white rounded-lg shadow-lg overflow-hidden">
                 <h2 className="text-3xl mb-6 font-bold text-gray-800 px-6 py-4 bg-white border-b">Checkout your order</h2>
                 <div className="flex w-full gap-6">

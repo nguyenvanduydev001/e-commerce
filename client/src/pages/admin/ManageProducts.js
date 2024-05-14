@@ -73,7 +73,7 @@ const ManageProducts = () => {
     };
 
     return (
-        <div className='w-full flex h-[735px] flex-col gap-4 relative bg-white'>
+        <div className='w-full flex h-full flex-col gap-4 relative bg-white'>
             {editProduct && <div className='absolute inset-0 min-h-screen z-50 bg-[#e5e7eb]'>
                 <UpdateProduct
                     editProduct={editProduct}

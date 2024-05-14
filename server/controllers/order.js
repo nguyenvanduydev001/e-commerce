@@ -37,28 +37,7 @@ const getUserOrders = asyncHandler(async (req, res) => {
     let queryString = JSON.stringify(queries)
     queryString = queryString.replace(/\b(gte|gt|lt|lte)\b/g, macthedEl => `$${macthedEl}`)
     let formatedQueries = JSON.parse(queryString)
-    // let colorQueryObject = {}
-    // if (queries?.title) formatedQueries.title = { $regex: queries.title, $options: 'i' }
-    // if (queries?.category) formatedQueries.category = { $regex: queries.category, $options: 'i' }
-    // if (queries?.color) {
-    //     delete formatedQueries.color
-    //     const colorArr = queries.color?.split(',')
-    //     const colorQuery = colorArr.map(el => ({ color: { $regex: el, $options: 'i' } }))
-    //     colorQueryObject = { $or: colorQuery }
-    // }
-    // let queryObject = {}
-    // if (queries?.q) {
-    //     delete formatedQueries.q
-    //     queryObject = {
-    //         $or: [
-    //             { color: { $regex: queries.q, $options: 'i' } },
-    //             { title: { $regex: queries.q, $options: 'i' } },
-    //             { category: { $regex: queries.q, $options: 'i' } },
-    //             { brand: { $regex: queries.q, $options: 'i' } },
-    //             { description: { $regex: queries.q, $options: 'i' } },
-    //         ]
-    //     }
-    // }
+
     const qr = { ...formatedQueries, orderBy: _id }
     let queryCommand = Order.find(qr)
 

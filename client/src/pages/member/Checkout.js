@@ -6,6 +6,7 @@ import { Congrat, InputFrom, Paypal } from "components";
 import withBaseComponent from "hocs/withBaseComponent";
 import { getCurrent } from "store/user/asyncActions";
 import { Helmet } from "react-helmet";
+import { FaOpencart } from "react-icons/fa";
 
 const Checkout = ({ dispatch }) => {
     const { currentCart, current } = useSelector(state => state.user)
@@ -22,10 +23,10 @@ const Checkout = ({ dispatch }) => {
                 <title>Checkout - Digital World</title>
             </Helmet>
             <div className="flex w-full flex-col justify-center gap-6 bg-white rounded-lg shadow-lg overflow-hidden">
-                <h2 className="text-3xl mb-6 font-bold text-gray-800 px-6 py-4 bg-white border-b">Checkout your order</h2>
+                <h2 className="text-3xl mb-6 font-bold text-gray-800 px-6 py-4 flex  bg-white border-b">Checkout your order <FaOpencart className="ml-[74%]" /> </h2>
                 <div className="flex w-full gap-6">
                     <div className="flex-[50%]">
-                        <table className="w-full">
+                        <table className="table-auto min-w-full ml-[27px] bg-white border rounded shadow-md">
                             <thead>
                                 <tr className="border bg-white ">
                                     <th className="text-left p-2 ">Product</th>
@@ -35,15 +36,22 @@ const Checkout = ({ dispatch }) => {
                             </thead>
                             <tbody>
                                 {currentCart?.map(el => (<tr className="border" key={el._id}>
-                                    <td className="textleft p-2">{el.title}</td>
+                                    <td className="flex p-2">
+                                        <img
+                                            src={el.thumbnail}
+                                            alt="thumb"
+                                            className="w-12 h-12 rounded-none object-cover"
+                                        />
+                                        <span className="mt-[8px] ml-[12px]">{el.title}</span>
+                                    </td>
                                     <td className="text-center p-2">{el.quantity}</td>
                                     <td className="text-right p-2">{formatMoney(el.price) + ' VND'}</td>
                                 </tr>))}
                             </tbody>
                         </table>
                     </div>
-                    <div className="flex-[50%] flex flex-col justify-between gap-[45px]">
-                        <div className="flex ml-[8px] flex-col gap-6">
+                    <div className="flex-[50%]  flex flex-col justify-between gap-[45px]">
+                        <div className="flex ml-[33px] flex-col gap-6">
                             <span className="flex items-center gap-8 text-sm">
                                 <span className="text-2xl">Total:</span>
                                 <span className=" text-2xl font-semibold">{formatMoney(currentCart.reduce((sum, el) => sum + Number(el?.price) * el.quantity, 0)) + ' VND'}</span>
@@ -53,7 +61,7 @@ const Checkout = ({ dispatch }) => {
                                 <span className=" font-semibold">{current?.address}</span>
                             </span>
                         </div>
-                        <div className="w-[700px] mx-auto">
+                        <div className="w-[652px] mx-auto">
                             <Paypal
                                 payload={{
                                     products: currentCart,

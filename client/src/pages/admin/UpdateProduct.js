@@ -2,15 +2,17 @@ import { InputFrom, MarkdownEditor, Select, Button, Loading } from 'components'
 import React, { memo, useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { validate, getBase64 } from 'utils/helpers'
-import { toast } from 'react-toastify';
 import { apiUpdateProduct } from 'apis'
 import { showModal } from 'store/app/appSlice'
+import ReactLoading from "react-loading";
 import { useSelector, useDispatch } from 'react-redux'
 
 const UpdateProduct = ({ editProduct, render, setEditProduct }) => {
     const { categories } = useSelector(state => state.app)
     const dispatch = useDispatch()
     const { register, handleSubmit, formState: { errors }, reset, watch } = useForm()
+    const [loading, setLoading] = useState(true); // Initial loading state
+
     const [payload, setPayload] = useState({
         description: ''
     })
@@ -18,6 +20,13 @@ const UpdateProduct = ({ editProduct, render, setEditProduct }) => {
         thumb: null,
         images: []
     })
+    useEffect(() => {
+        // Show the loading spinner for 3 seconds when the component mounts
+        const timer = setTimeout(() => {
+            setLoading(false);
+        }, 1000);
+        return () => clearTimeout(timer); // Clean up the timer on component unmount
+    }, []);
 
     useEffect(() => {
         reset({
@@ -47,9 +56,10 @@ const UpdateProduct = ({ editProduct, render, setEditProduct }) => {
         const imagesPreview = []
         for (let file of files) {
             if (file.type !== 'image/png' && file.type !== 'image/jpg') {
-                toast.warning('File not supported!')
-                return
+                alert('File not supported!');
+                return;
             }
+
             const base64 = await getBase64(file)
             imagesPreview.push(base64)
         }
@@ -78,20 +88,33 @@ const UpdateProduct = ({ editProduct, render, setEditProduct }) => {
             const response = await apiUpdateProduct(formData, editProduct._id)
             dispatch(showModal({ isShowModal: false, modalChildren: null }))
             if (response.success) {
-                toast.success(response.mes)
-                render()
-                setEditProduct(null)
-            } else toast.error(response.mes)
+                alert(response.mes);
+                render();
+                setEditProduct(null);
+            } else {
+                alert(response.mes);
+            }
+
         }
     }
     return (
         <div className='w-full flex flex-col gap-4 relative'>
+            {loading && (
+                <div className='fixed inset-0 flex items-center justify-center z-50'>
+                    <ReactLoading
+                        type="spinningBubbles"
+                        color="#ee3131"
+                        height={100}
+                        width={50}
+                    />
+                </div>
+            )}
             <div className='h-[69px] w-full'></div>
-            <div className='p-4 border-b bg-[#e5e7eb] flex justify-between items-center border-gray-300 right-0 left-[327px] fixed top-0'>
+            <div className='p-4 border-b bg-white flex justify-between items-center border-gray-300 right-0 left-[327px] fixed top-0'>
                 <h1 className='text-3xl font-bold tracking-tight'>Manage prodcuts</h1>
                 <span className='text-main hover:underline cursor-pointer' onClick={() => setEditProduct(null)}>Cancel</span>
             </div>
-            <div className='p-4'>
+            <div className='p-4 bg-white'>
                 <form onSubmit={handleSubmit(handleUpdateProduct)}>
                     <InputFrom
                         label='Name product'

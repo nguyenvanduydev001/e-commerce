@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { apiGetUsers, apiUpdateUser, apiDeleteUser } from 'apis/user'
 import { roles, blockStatus } from 'utils/contants'
-import moment from 'moment'
 import { InputField, Pagination, InputFrom, Select, Button } from 'components'
 import useDebounce from 'hooks/useDebounce'
 import { useSearchParams } from 'react-router-dom'
@@ -9,6 +8,7 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import Swal from 'sweetalert2'
 import clsx from 'clsx'
+import ReactLoading from "react-loading";
 
 const ManageUser = () => {
     const { handleSubmit, register, formState: { errors }, reset } = useForm({
@@ -19,6 +19,7 @@ const ManageUser = () => {
         phone: '',
         isBlocked: ''
     })
+    const [loading, setLoading] = useState(true); // Initial loading state
     const [users, setUsers] = useState(null)
     const [queries, setQueries] = useState({
         q: ""
@@ -40,6 +41,13 @@ const ManageUser = () => {
         if (queriesDebounce) queries.q = queriesDebounce
         fetchUsers(queries)
     }, [queriesDebounce, params])
+    useEffect(() => {
+        // Show the loading spinner for 3 seconds when the component mounts
+        const timer = setTimeout(() => {
+            setLoading(false);
+        }, 1000);
+        return () => clearTimeout(timer); // Clean up the timer on component unmount
+    }, []);
     const handleUpdate = async (data) => {
         const response = await apiUpdateUser(data, editElm._id)
         if (response.success) {
@@ -64,9 +72,28 @@ const ManageUser = () => {
         })
 
     }
+    const formatDate = (dateString) => {
+        const options = {
+            year: 'numeric', month: '2-digit', day: '2-digit',
+            hour: '2-digit', minute: '2-digit', second: '2-digit',
+            hour12: false
+        };
+        return new Date(dateString).toLocaleString('vi-VN', options);
+    }
+
 
     return (
         <div className={clsx('w-full bg-white h-full', editElm && 'pl-20')}>
+            {loading && (
+                <div className='fixed inset-0 flex items-center justify-center  z-50'>
+                    <ReactLoading
+                        type="spinningBubbles"
+                        color="#ee3131"
+                        height={100}
+                        width={50}
+                    />
+                </div>
+            )}
             <div className='w-full px-4'>
                 <div className='flex justify-end py-4'>
                     <InputField
@@ -188,7 +215,7 @@ const ManageUser = () => {
                                             : <span>{el.isBlocked ? 'Blocked' : 'Active'}</span>
                                         }
                                     </td>
-                                    <td className='py-2 px-4'>{moment(el.createdAt).format('DD/MM/YYYY')}</td>
+                                    <td className='text-center py-2'>{formatDate(el.createdAt)}</td>
                                     <td className='py-2 px-4'>
                                         {editElm?._id === el._id ? <span onClick={() => setEditElm(null)} className='px-2 text-orange-600 hover:underline cursor-pointer'>
                                             Back</span>

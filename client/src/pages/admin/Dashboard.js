@@ -107,7 +107,7 @@ class Dashboard extends PureComponent {
                                 <p className="text-white text-lg">Total Products: 68</p>
                                 <p className="text-white text-lg">Best Selling Product: "Tablet"</p>
                                 <p className="text-white text-lg">Out of Stock Products: 4</p>
-                                <Link to="/admin/manage-products" className="block mt-4 bg-white text-yellow-500 py-2 px-4 rounded-lg">View Products</Link>
+                                <Link to="/admin/revenue" className="block mt-4 bg-white text-yellow-500 py-2 px-4 rounded-lg">View Products</Link>
                             </div>
                         </div>
                     </div>

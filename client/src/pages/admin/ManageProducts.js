@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { CustomizeVarriants, InputFrom, Pagination } from 'components';
 import { useForm } from 'react-hook-form';
 import { apiGetProducts, apiDeleteProduct } from 'apis/product';
-import moment from 'moment';
 import { useSearchParams, createSearchParams, useNavigate, useLocation } from 'react-router-dom';
 import useDebounce from 'hooks/useDebounce';
 import UpdateProduct from './UpdateProduct';
@@ -11,6 +10,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { BiCustomize, BiEdit } from 'react-icons/bi';
 import { RiDeleteBin6Line } from 'react-icons/ri';
+import ReactLoading from "react-loading";
 
 
 
@@ -24,6 +24,7 @@ const ManageProducts = () => {
     const [editProduct, setEditProduct] = useState(null);
     const [update, setUpdate] = useState(false);
     const [customizeVarriant, setCustomizeVarriant] = useState(null);
+    const [loading, setLoading] = useState(true); // Initial loading state
 
     const render = useCallback(() => {
         setUpdate(!update);
@@ -56,6 +57,14 @@ const ManageProducts = () => {
         fetchProducts(searchParams);
     }, [params, update]);
 
+    useEffect(() => {
+        // Show the loading spinner for 3 seconds when the component mounts
+        const timer = setTimeout(() => {
+            setLoading(false);
+        }, 1000);
+        return () => clearTimeout(timer); // Clean up the timer on component unmount
+    }, []);
+
     const handleDeleteProduct = (pid) => {
         Swal.fire({
             title: 'Are you sure',
@@ -72,9 +81,28 @@ const ManageProducts = () => {
         });
     };
 
+    const formatDate = (dateString) => {
+        const options = {
+            year: 'numeric', month: '2-digit', day: '2-digit',
+            hour: '2-digit', minute: '2-digit', second: '2-digit',
+            hour12: false
+        };
+        return new Date(dateString).toLocaleString('vi-VN', options);
+    }
+
     return (
         <div className='w-full flex h-full flex-col gap-4 relative bg-white px-4'>
-            {editProduct && <div className='absolute inset-0 min-h-screen z-50 bg-[#e5e7eb]'>
+            {loading && (
+                <div className='fixed inset-0 flex items-center justify-center z-50'>
+                    <ReactLoading
+                        type="spinningBubbles"
+                        color="#ee3131"
+                        height={100}
+                        width={50}
+                    />
+                </div>
+            )}
+            {editProduct && <div className='absolute inset-0 min-h-screen z-50 bg-white'>
                 <UpdateProduct
                     editProduct={editProduct}
                     render={render}
@@ -133,7 +161,7 @@ const ManageProducts = () => {
                             <td className='text-center py-2'>{el.color}</td>
                             <td className='text-center py-2'>{el.totalRatings}</td>
                             <td className='text-center py-2'>{el?.varriants?.length || 0}</td>
-                            <td className='text-center py-2'>{moment(el.createdAt).format('DD/MM/YYYY')}</td>
+                            <td className='text-center py-2'>{formatDate(el.createdAt)}</td>
                             <td className='text-center py-2 flex mt-3'>
                                 <span onClick={() => setEditProduct(el)} className='text-blue-500 hover:text-orange-500 hover:underline 
                                 cursor-pointer px-1'><BiEdit size={20} /></span>
@@ -149,6 +177,7 @@ const ManageProducts = () => {
             <div className='w-full mt-[27px] flex justify-end '>
                 <Pagination totalCount={counts} />
             </div>
+
         </div>
     );
 };

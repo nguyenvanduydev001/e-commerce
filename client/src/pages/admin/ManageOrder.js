@@ -1,69 +1,14 @@
-
-// const ManageOrder = () => {
-//     const [orders, setOrders] = useState([]);
-//     const [isLoading, setIsLoading] = useState(true);
-
-//     useEffect(() => {
-//         const fetchOrders = async () => {
-//             const response = await apiGetOrders();
-//             if (response.success) {
-//                 setOrders(response.orders);
-//             }
-//             setIsLoading(false);
-//         };
-//         fetchOrders();
-//     }, []);
-
-//     return (
-//         <div className="p-6 bg-white rounded shadow-md">
-//             <h1 className="text-2xl font-bold mb-4">Manage Orders</h1>
-//             {isLoading ? (
-//                 <div className="text-center text-blue-500">Loading...</div>
-//             ) : (
-//                 <div className="overflow-x-auto">
-//                     <table className="min-w-full bg-white border">
-//                         <thead>
-//                             <tr className="w-full bg-gray-100 text-gray-600 text-left text-sm uppercase font-semibold">
-//                                 <th className="py-2 px-4 border-b">Order ID</th>
-//                                 <th className="py-2 px-4 border-b">Customer</th>
-//                                 <th className="py-2 px-4 border-b">Product</th>
-//                                 <th className="py-2 px-4 border-b">Quantity</th>
-//                                 <th className="py-2 px-4 border-b">Status</th>
-//                                 <th className="py-2 px-4 border-b">Actions</th>
-//                             </tr>
-//                         </thead>
-//                         <tbody>
-//                             {orders.map(order => (
-//                                 <tr key={order.id} className="hover:bg-gray-50">
-//                                     <td className="py-2 px-4 border-b">{order.id}</td>
-//                                     <td className="py-2 px-4 border-b">{order.customer}</td>
-//                                     <td className="py-2 px-4 border-b">{order.product}</td>
-//                                     <td className="py-2 px-4 border-b">{order.quantity}</td>
-//                                     <td className="py-2 px-4 border-b">{order.status}</td>
-//                                     <td className="py-2 px-4 border-b">
-//                                         <button className="text-blue-500 hover:text-blue-700 mr-2">Edit</button>
-//                                         <button className="text-red-500 hover:text-red-700">Delete</button>
-//                                     </td>
-//                                 </tr>
-//                             ))}
-//                         </tbody>
-//                     </table>
-//                 </div>
-//             )}
-//         </div>
-//     );
-// };
 import { apiGetOrders } from "apis";
 import { CustomSelect, InputFrom, Pagination } from "components";
 import withBaseComponent from "hocs/withBaseComponent";
-import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { createSearchParams, useSearchParams } from "react-router-dom";
-
 import { statusOrders } from "utils/contants";
+import ReactLoading from "react-loading";
 
 const ManageOrder = ({ navigate, location }) => {
+    const [loading, setLoading] = useState(true); // Initial loading state
     const [orders, setOrders] = useState(null)
     const [counts, setCounts] = useState(0);
     const [params] = useSearchParams();
@@ -90,6 +35,14 @@ const ManageOrder = ({ navigate, location }) => {
         fetchOrders(pr)
     }, [params])
 
+    useEffect(() => {
+        // Show the loading spinner for 3 seconds when the component mounts
+        const timer = setTimeout(() => {
+            setLoading(false);
+        }, 1000);
+        return () => clearTimeout(timer); // Clean up the timer on component unmount
+    }, []);
+
     const handleSearchStatus = ({ value }) => {
         navigate({
             pathname: location.pathname,
@@ -103,8 +56,28 @@ const ManageOrder = ({ navigate, location }) => {
         return amountInUSD * exchangeRate;
     };
 
+    const formatDate = (dateString) => {
+        const options = {
+            year: 'numeric', month: '2-digit', day: '2-digit',
+            hour: '2-digit', minute: '2-digit', second: '2-digit',
+            hour12: false
+        };
+        return new Date(dateString).toLocaleString('vi-VN', options);
+    }
+
+
     return (
         <div className="w-full relative px-4 p-6 bg-white h-full">
+            {loading && (
+                <div className='fixed inset-0 flex items-center justify-center  z-50'>
+                    <ReactLoading
+                        type="spinningBubbles"
+                        color="#ee3131"
+                        height={100}
+                        width={50}
+                    />
+                </div>
+            )}
             <div className='flex justify-end items-center px-4 '>
                 <form className='w-[45%] grid grid-cols-2 gap-4'>
                     <div className='flex w-full justify-end items-center px-4 pt-4 pb-4'>
@@ -134,6 +107,7 @@ const ManageOrder = ({ navigate, location }) => {
                         <tr className="w-full bg-main text-white text-left text-sm uppercase font-semibold">
                             <th className='text-center py-2'>Order ID</th>
                             <th className='text-center py-2'>Products</th>
+                            <th className='text-center py-2'>Quantity</th>
                             <th className='text-center py-2'>Total</th>
                             <th className='text-center py-2'>Status</th>
                             <th className='text-center py-2'>Date</th>
@@ -166,10 +140,13 @@ const ManageOrder = ({ navigate, location }) => {
                                         ))}
                                     </span>
                                 </td>
+                                <td className='text-center py-2'>
+                                    {el.products?.reduce((total, item) => total + item.quantity, 0)}
+                                </td>
                                 <td className='text-center py-2'>{convertUSDToVND(el.total).toLocaleString('vi-VN')} VND</td>
                                 <td className='text-center py-2'>{el.status}</td>
                                 <td className='text-center py-2'>
-                                    {moment(el.createdAt).format('DD/MM/YYYY')}
+                                    {formatDate(el.createdAt)}
                                 </td>
                             </tr>
                         ))}

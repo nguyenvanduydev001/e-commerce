@@ -4,7 +4,8 @@ import { useForm } from 'react-hook-form';
 import { useSelector, useDispatch } from 'react-redux';
 import { getBase64 } from 'utils/helpers';
 import { apiCreateProduct } from 'apis';
-import { showModal } from 'store/app/appSlice';
+import ReactLoading from "react-loading";
+
 
 const validate = (payload, setInvalidFields) => {
     let invalids = 0;
@@ -28,6 +29,7 @@ const validate = (payload, setInvalidFields) => {
 };
 
 const CreateProducts = () => {
+    const [loading, setLoading] = useState(true); // Initial loading state
     const { categories } = useSelector(state => state.app);
     const dispatch = useDispatch();
     const { register, formState: { errors }, reset, handleSubmit, watch } = useForm();
@@ -50,6 +52,13 @@ const CreateProducts = () => {
         const base64Thumb = await getBase64(file);
         setPreview(prev => ({ ...prev, thumb: base64Thumb }));
     };
+    useEffect(() => {
+        // Show the loading spinner for 3 seconds when the component mounts
+        const timer = setTimeout(() => {
+            setLoading(false);
+        }, 1000);
+        return () => clearTimeout(timer); // Clean up the timer on component unmount
+    }, []);
 
     const handlePreviewImages = async (files) => {
         const imagesPreview = [];
@@ -111,6 +120,16 @@ const CreateProducts = () => {
 
     return (
         <div className='w-full bg-white'>
+            {loading && (
+                <div className='fixed inset-0 flex items-center justify-center z-50'>
+                    <ReactLoading
+                        type="spinningBubbles"
+                        color="#ee3131"
+                        height={100}
+                        width={50}
+                    />
+                </div>
+            )}
             <div className='p-4'>
                 <form onSubmit={handleSubmit(handleCreateProduct)}>
                     <InputFrom

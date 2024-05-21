@@ -21,6 +21,7 @@ const path = {
     MANAGE_PRODUCTS: 'manage-products',
     MANAGE_ORDER: 'manage-order',
     CREATE_PRODUCTS: 'create-products',
+    MANAGE_REVENUE: 'revenue',
 
 
     // Number 

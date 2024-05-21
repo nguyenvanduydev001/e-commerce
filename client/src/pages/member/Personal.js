@@ -1,21 +1,21 @@
-import { Button, InputFrom } from 'components'
-import moment from 'moment'
-import React, { useEffect } from 'react'
-import { useForm } from 'react-hook-form'
-import { useDispatch, useSelector } from 'react-redux'
-import avatar from 'assets/avatarDefault.png'
-import { apiUpdateCurrent } from 'apis'
-import { getCurrent } from 'store/user/asyncActions'
-import { toast } from 'react-toastify'
-import { useSearchParams } from 'react-router-dom'
-import withBaseComponent from 'hocs/withBaseComponent'
+import { Button, InputFrom } from 'components';
+import moment from 'moment';
+import React, { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { useDispatch, useSelector } from 'react-redux';
+import avatar from 'assets/avatarDefault.png';
+import { apiUpdateCurrent } from 'apis';
+import { getCurrent } from 'store/user/asyncActions';
+import { toast } from 'react-toastify';
+import { useSearchParams } from 'react-router-dom';
+import withBaseComponent from 'hocs/withBaseComponent';
 
 const Personal = ({ navigate }) => {
-    const { register, formState: { errors, isDirty }, handleSubmit, reset } = useForm()
-    const { current } = useSelector(state => state.user)
-    const dispatch = useDispatch()
-    const [searchParams] = useSearchParams()
-    console.log(searchParams.get('redirect'))
+    const { register, formState: { errors, isDirty }, handleSubmit, reset } = useForm();
+    const { current } = useSelector(state => state.user);
+    const dispatch = useDispatch();
+    const [searchParams] = useSearchParams();
+
     useEffect(() => {
         reset({
             firstname: current?.firstname,
@@ -24,57 +24,59 @@ const Personal = ({ navigate }) => {
             email: current?.email,
             avatar: current?.avatar,
             address: current?.address,
-        })
-    }, [current])
-    const handleUpdateInfor = async (data) => {
-        const formData = new FormData()
-        if (data.avatar.length > 0) formData.append('avatar', data.avatar[0])
-        delete data.avatar
-        for (let i of Object.entries(data)) formData.append(i[0], i[1])
+        });
+    }, [current]);
 
-        const response = await apiUpdateCurrent(formData)
+    const handleUpdateInfor = async (data) => {
+        const formData = new FormData();
+        if (data.avatar.length > 0) formData.append('avatar', data.avatar[0]);
+        delete data.avatar;
+        for (let i of Object.entries(data)) formData.append(i[0], i[1]);
+
+        const response = await apiUpdateCurrent(formData);
         if (response.success) {
-            dispatch(getCurrent())
-            toast.success(response.mes)
-            if (searchParams.get('redirect')) navigate(searchParams.get('redirect'))
-        } else toast.error(response.mes)
-    }
+            dispatch(getCurrent());
+            toast.success(response.mes);
+            if (searchParams.get('redirect')) navigate(searchParams.get('redirect'));
+        } else toast.error(response.mes);
+    };
+
     return (
-        <div className='w-full relative px-4'>
-            <form onSubmit={handleSubmit(handleUpdateInfor)} className='w-3/5 mx-auto py-8 flex flex-col gap-4'>
-                <div className='flex flex-col gap-2 items-center'>
-                    <span className='font-medium'>Profile image:</span>
-                    <label htmlFor="file">
-                        <img src={current?.avatar || avatar} alt="avatar" className='w-20 h-20 ml-8 object-cover rounded-full border' />
+        <div className='w-full relative px-4 py-8 bg-gray-50 min-h-screen'>
+            <form onSubmit={handleSubmit(handleUpdateInfor)} className='w-full max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-md flex flex-col gap-6'>
+                <div className='flex flex-col items-center'>
+                    <span className='font-medium text-lg'>Profile Image</span>
+                    <label htmlFor="file" className='cursor-pointer'>
+                        <img src={current?.avatar || avatar} alt="avatar" className='w-24 h-24 object-cover rounded-full border-2 border-gray-300' />
                     </label>
                     <input type="file" id='file' {...register('avatar')} hidden multiple={false} />
                 </div>
                 <InputFrom
-                    label='Firstname'
+                    label='First Name'
                     register={register}
                     errors={errors}
                     id='firstname'
                     validate={{
-                        required: 'Need fill this field'
+                        required: 'This field is required'
                     }}
                 />
                 <InputFrom
-                    label='Lastname'
+                    label='Last Name'
                     register={register}
                     errors={errors}
                     id='lastname'
                     validate={{
-                        required: 'Need fill this field'
+                        required: 'This field is required'
                     }}
                 />
                 <InputFrom
-                    label='Email address'
+                    label='Email Address'
                     register={register}
                     errors={errors}
                     id='email'
                     validate={{
-                        required: 'Need fill this field',
-                        pattern: { value: /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/, message: 'Email invalid' }
+                        required: 'This field is required',
+                        pattern: { value: /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/, message: 'Invalid email' }
                     }}
                 />
                 <InputFrom
@@ -83,10 +85,10 @@ const Personal = ({ navigate }) => {
                     errors={errors}
                     id='mobile'
                     validate={{
-                        required: 'Need fill this field',
+                        required: 'This field is required',
                         pattern: {
                             value: /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4}$/gm,
-                            message: 'Phone invalid'
+                            message: 'Invalid phone number'
                         }
                     }}
                 />
@@ -96,26 +98,31 @@ const Personal = ({ navigate }) => {
                     errors={errors}
                     id='address'
                     validate={{
-                        required: 'Need fill this field',
+                        required: 'This field is required',
                     }}
                 />
-                <div className='flex items-center gap-2'>
-                    <span className='font-medium'>Account status:</span>
-                    <span>{current?.isBlocked ? 'Blocked' : 'Actived'}</span>
+                <div className='flex flex-col gap-2'>
+                    <div className='flex items-center gap-2'>
+                        <span className='font-medium'>Account Status:</span>
+                        <span>{current?.isBlocked ? 'Blocked' : 'Active'}</span>
+                    </div>
+                    <div className='flex items-center gap-2'>
+                        <span className='font-medium'>Role:</span>
+                        <span>{+current?.role === 1945 ? 'Admin' : 'User'}</span>
+                    </div>
+                    <div className='flex items-center gap-2'>
+                        <span className='font-medium'>Created At:</span>
+                        <span>{moment(current?.createdAt).fromNow()}</span>
+                    </div>
                 </div>
-                <div className='flex items-center gap-2'>
-                    <span className='font-medium'>Role:</span>
-                    <span>{+current?.role === 1945 ? 'Admin' : 'User'}</span>
-                </div>
-                <div className='flex items-center gap-2'>
-                    <span className='font-medium'>Created At:</span>
-                    <span>{moment(current?.createdAt).fromNow()}</span>
-                </div>
-
-                {isDirty && <div className='w-full flex justify-end'><Button type='submit'>Update information</Button></div>}
+                {isDirty && (
+                    <div className='w-full flex justify-end'>
+                        <Button type='submit'>Update Information</Button>
+                    </div>
+                )}
             </form>
-        </div >
-    )
-}
+        </div>
+    );
+};
 
-export default withBaseComponent(Personal)
+export default withBaseComponent(Personal);

@@ -42,11 +42,14 @@ const History = ({ navigate, location }) => {
         })
     }
 
+    // Hàm chuyển đổi tiền tệ từ USD sang VND
+    const convertUSDToVND = (amountInUSD) => {
+        const exchangeRate = 23500; // Giả sử 1 USD = 20,000 VND
+        return amountInUSD * exchangeRate;
+    };
+
     return (
         <div className="w-full relative px-4">
-            <header className='text-3xl font-semibold py-4 border-b border-[#ee3131]'>
-                History
-            </header>
             <div className='flex justify-end items-center px-4'>
                 <form className='w-[45%] grid grid-cols-2 gap-4'>
                     <div className="col-span-1">
@@ -68,11 +71,12 @@ const History = ({ navigate, location }) => {
                     </div>
                 </form>
             </div>
-            <table className='table-auto w-full'>
+            <table className='table-auto min-w-full bg-white border rounded shadow-md'>
                 <thead>
-                    <tr className='border  bg-main text-white border-b-white'>
-                        <th className='text-center py-2'>Order #</th>
+                    <tr className='w-full bg-main text-white text-left text-sm uppercase font-semibold'>
+                        <th className='text-center py-2'>Order ID</th>
                         <th className='text-center py-2'>Products</th>
+                        <th className='text-center py-2'>Quantity</th>
                         <th className='text-center py-2'>Total</th>
                         <th className='text-center py-2'>Status</th>
                         <th className='text-center py-2'>Date</th>
@@ -100,18 +104,15 @@ const History = ({ navigate, location }) => {
                                                 <span className="text-main text-sm">
                                                     {item.title}
                                                 </span>
-                                                <span className="flex items-center text-xs gap-2">
-                                                    <span>Quantity:</span>
-                                                    <span className="text-main">
-                                                        {item.quantity}
-                                                    </span>
-                                                </span>
                                             </span>
                                         </span>
                                     ))}
                                 </span>
                             </td>
-                            <td className='text-center py-2'>{"$" + el.total}</td>
+                            <td className='text-center py-2'>
+                                {el.products?.reduce((total, item) => total + item.quantity, 0)}
+                            </td>
+                            <td className='text-center py-2'>{convertUSDToVND(el.total).toLocaleString('vi-VN')} VND</td>
                             <td className='text-center py-2'>{el.status}</td>
                             <td className='text-center py-2'>
                                 {moment(el.createdAt).format('DD/MM/YYYY')}
@@ -121,7 +122,7 @@ const History = ({ navigate, location }) => {
                     ))}
                 </tbody>
             </table>
-            <div className='w-full flex justify-end '>
+            <div className='w-full flex mt-1 justify-end'>
                 <Pagination totalCount={counts} />
             </div>
         </div>

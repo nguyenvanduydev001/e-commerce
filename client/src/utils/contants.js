@@ -181,7 +181,7 @@ export const voteOptions = [
     }
 ]
 
-const { AiOutlineDashboard, MdGroups, TbBrandProducthunt, RiBillLine } = icons
+const { AiOutlineDashboard, MdGroups, TbBrandProducthunt, RiBillLine, CiAlignBottom } = icons
 export const adminSidebar = [
     {
         id: 1,
@@ -219,6 +219,13 @@ export const adminSidebar = [
         text: 'Manage orders',
         path: `/${path.ADMIN}/${path.MANAGE_ORDER}`,
         icon: <RiBillLine size={20} />
+    },
+    {
+        id: 4,
+        type: 'SINGLE',
+        text: 'Revenue',
+        path: `/${path.ADMIN}/${path.MANAGE_REVENUE}`,
+        icon: <CiAlignBottom size={20} />
     },
 ]
 

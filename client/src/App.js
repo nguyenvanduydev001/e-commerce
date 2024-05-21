@@ -19,7 +19,8 @@ import {
   ManageProducts,
   ManageUser,
   CreateProducts,
-  Dashboard
+  Dashboard,
+  Revenue
 } from 'pages/admin'
 import {
   MemberLayout,
@@ -64,6 +65,7 @@ function App() {
         <Route path={path.ADMIN} element={<AdminLayout />}>
           <Route path={path.DASHBOARD} element={<Dashboard />} />
           <Route path={path.MANAGE_ORDER} element={<ManageOrder />} />
+          <Route path={path.MANAGE_REVENUE} element={<Revenue />} />
           <Route path={path.MANAGE_PRODUCTS} element={<ManageProducts />} />
           <Route path={path.MANAGE_USER} element={<ManageUser />} />
           <Route path={path.CREATE_PRODUCTS} element={<CreateProducts />} />
@@ -87,7 +89,7 @@ function App() {
         pauseOnFocusLoss
         draggable
         pauseOnHover
-        theme="colored"
+        theme="red"
       />
       <ToastContainer />
     </div>

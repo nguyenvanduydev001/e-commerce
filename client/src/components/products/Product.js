@@ -9,7 +9,6 @@ import withBaseComponent from "hocs/withBaseComponent";
 import { showModal } from "store/app/appSlice";
 import { DetailProduct } from "pages/public";
 import { apiUpdateCart, apiUpdateWishlist } from "apis";
-import { toast } from "react-toastify";
 import { getCurrent } from "store/user/asyncActions";
 import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
@@ -48,18 +47,20 @@ const Product = ({ productData, isNew, normal, navigate, dispatch, location, pid
                 title: productData?.title,
             })
             if (response.success) {
-                toast.success(response.mes)
+                alert(response.mes);
                 dispatch(getCurrent())
             }
-            else toast.error(response.mes)
+            else alert(response.mes)
         }
         if (flag === 'WISHLIST') {
             const response = await apiUpdateWishlist(pid)
             if (response.success) {
                 dispatch(getCurrent())
-                toast.success(response.mes)
-            } else toast.error(response.mes)
-            console.log(pid)
+                alert(response.mes);
+            } else {
+                alert(response.mes)
+                console.log(pid)
+            }
         }
         if (flag === 'QUICK_VIEW') {
             dispatch(showModal({ isShowModal: true, modalChildren: <DetailProduct data={{ pid: productData?._id, category: productData?.category }} isQuickView /> }))

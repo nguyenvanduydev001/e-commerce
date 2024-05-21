@@ -47,6 +47,14 @@ const History = ({ navigate, location }) => {
         const exchangeRate = 23500; // Giả sử 1 USD = 20,000 VND
         return amountInUSD * exchangeRate;
     };
+    const formatDate = (dateString) => {
+        const options = {
+            year: 'numeric', month: '2-digit', day: '2-digit',
+            hour: '2-digit', minute: '2-digit', second: '2-digit',
+            hour12: false
+        };
+        return new Date(dateString).toLocaleString('vi-VN', options);
+    }
 
     return (
         <div className="w-full relative px-4">
@@ -115,7 +123,7 @@ const History = ({ navigate, location }) => {
                             <td className='text-center py-2'>{convertUSDToVND(el.total).toLocaleString('vi-VN')} VND</td>
                             <td className='text-center py-2'>{el.status}</td>
                             <td className='text-center py-2'>
-                                {moment(el.createdAt).format('DD/MM/YYYY')}
+                                {formatDate(el.createdAt)}
                             </td>
 
                         </tr>

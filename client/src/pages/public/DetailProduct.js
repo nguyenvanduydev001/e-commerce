@@ -141,10 +141,10 @@ const DetailProduct = ({ isQuickView, data, location, dispatch, navigate }) => {
             title: currentProduct.title || product.title,
         })
         if (response.success) {
-            toast.success(response.mes)
+            alert(response.mes)
             dispatch(getCurrent())
         }
-        else toast.error(response.mes)
+        else { alert.error(response.mes) }
     }
     console.log(currentProduct.images)
     return (

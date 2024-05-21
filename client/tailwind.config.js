@@ -35,6 +35,16 @@ module.exports = {
       colors: {
         main: '#ee3131'
       },
+      plugins: [
+        function ({ addUtilities }) {
+          const newUtilities = {
+            '.scrollbar-hidden::-webkit-scrollbar': {
+              display: 'none', /* Safari and Chrome */
+            }
+          };
+          addUtilities(newUtilities, ['responsive', 'hover']);
+        }
+      ],
       flex: {
         '2': '2 2 0%',
         '3': '3 3 0%',
@@ -99,5 +109,4 @@ module.exports = {
     require("@tailwindcss/line-clamp"),
     require("@tailwindcss/forms")({ strategy: 'class' }),
   ],
-
 }

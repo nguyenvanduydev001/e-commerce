@@ -36,16 +36,16 @@ const Personal = ({ navigate }) => {
         const response = await apiUpdateCurrent(formData);
         if (response.success) {
             dispatch(getCurrent());
-            toast.success(response.mes);
+            alert(response.mes);
             if (searchParams.get('redirect')) navigate(searchParams.get('redirect'));
-        } else toast.error(response.mes);
+        } else alert(response.mes);
     };
 
     return (
         <div className='w-full relative px-4 py-8 bg-gray-50 min-h-screen'>
             <form onSubmit={handleSubmit(handleUpdateInfor)} className='w-full max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-md flex flex-col gap-6'>
                 <div className='flex flex-col items-center'>
-                    <span className='font-medium text-lg'>Profile Image</span>
+                    <span className='font-medium text-lg mb-2'>Profile Image</span>
                     <label htmlFor="file" className='cursor-pointer'>
                         <img src={current?.avatar || avatar} alt="avatar" className='w-24 h-24 object-cover rounded-full border-2 border-gray-300' />
                     </label>

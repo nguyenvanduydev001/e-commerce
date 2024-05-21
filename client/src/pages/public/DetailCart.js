@@ -35,10 +35,10 @@ const DetailCart = ({ location, navigate }) => {
     return (
         <div className="w-full relative px-4">
             <div className="flex flex-col border my-8 w-full mx-auto rounded-md bg-white ">
-                <div className="w-full mx-auto border-b font-semibold py-3 grid grid-cols-10 uppercase">
-                    <span className="col-span-6 w-full text-center">Products</span>
-                    <span className="col-span-1 w-full text-center">Quantity</span>
-                    <span className="col-span-3 w-full text-center">Price</span>
+                <div className="w-full mx-auto border-b font-semibold bg-main py-3 grid grid-cols-10 uppercase">
+                    <span className="col-span-6 w-full text-white text-center">Products</span>
+                    <span className="col-span-1 w-full text-white text-center">Quantity</span>
+                    <span className="col-span-3 w-full text-white text-center">Price</span>
                 </div>
                 {currentCart.map(el => (
                     <OrderItem

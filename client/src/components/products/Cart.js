@@ -10,6 +10,7 @@ import { toast } from 'react-toastify'
 import { getCurrent } from 'store/user/asyncActions'
 import { apiRemoveCart } from 'apis'
 import path from 'utils/path'
+import { GoArrowRight } from "react-icons/go";
 
 const Cart = ({ dispatch, navigate }) => {
     const { currentCart } = useSelector(state => state.user);
@@ -57,7 +58,7 @@ const Cart = ({ dispatch, navigate }) => {
                 <Button handleOnClick={() => {
                     dispatch(showCart());
                     navigate(`/${path.MEMBER}/${path.DETAIL_CART}`);
-                }} style='rounded-none w-full bg-main py-3' >Shopping Cart ➡</Button>
+                }} style='rounded-none w-full bg-main py-3' >Shopping Cart </Button>
             </div>
         </div>
     );

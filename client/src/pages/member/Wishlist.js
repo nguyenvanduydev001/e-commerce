@@ -24,7 +24,7 @@ const Wishlist = () => {
                             <div className="p-4">
                                 <button
                                     onClick={() => handleRemoveFromWishlist(product._id)}
-                                    className="bg-red-500 hover:bg-red-600 text-white py-2 mt-2 px-4 rounded-md w-full"
+                                    className="bg-red-500 hover:bg-red-600 uppercase font-semibold text-white py-2 mt-2 px-4 rounded-md w-full"
                                 >
                                     Remove Wishlist
                                 </button>

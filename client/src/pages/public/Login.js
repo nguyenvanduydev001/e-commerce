@@ -105,31 +105,32 @@ const Login = () => {
                     </button>
                 </div>
             </div>}
-            {isForgotPassword && <div className='absolute animate-slide-right top-0 left-0 bottom-0 right-0 bg-white flex flex-col items-center py-8 z-50'>
-                <div className='flex flex-col gap-4'>
-                    <label htmlFor="email">Enter your email:</label>
-                    <input
-                        type="text"
-                        id="email"
-                        className='w-[800px] pb-2 border-b outline-none placeholder:text-sm'
-                        placeholder='Exp: email@gmail.com'
-                        value={email}
-                        onChange={e => setEmail(e.target.value)}
-                    />
-                    <div className='flex items-center justify-end w-full gap-4'>
-                        <Button
-                            name='Submit'
-                            handleOnClick={handleForgotPassword}
-                            style='px-4 py-2 rounded-md text-white bg-blue-500 text-semibold my-2'
+            {isForgotPassword && (
+                <div className='fixed inset-0 bg-gray-50 flex items-center justify-center z-50'>
+                    <div className='flex flex-col gap-4 w-full max-w-md p-6 bg-white rounded-lg shadow-lg'>
+                        <label htmlFor="email" className='text-lg font-semibold text-gray-700'>Enter your email:</label>
+                        <input
+                            type="text"
+                            id="email"
+                            className='w-full p-3 border border-gray-300 rounded-md outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-sm placeholder-gray-500'
+                            placeholder='Exp: email@gmail.com'
+                            value={email}
+                            onChange={e => setEmail(e.target.value)}
                         />
-                        <Button
-                            name='Back'
-                            handleOnClick={() => setIsForgotPassword(false)}
-
-                        />
+                        <div className='flex items-center justify-end w-full gap-4'>
+                            <Button
+                                handleOnClick={handleForgotPassword}
+                                style='px-4 py-2 rounded-md text-white bg-blue-600 hover:bg-blue-700 text-semibold my-2'
+                            >Submit</Button>
+                            <Button
+                                handleOnClick={() => setIsForgotPassword(false)}
+                                style='px-4 py-2 rounded-md text-white bg-gray-600 hover:bg-gray-700 text-semibold my-2'
+                            >Back</Button>
+                        </div>
                     </div>
                 </div>
-            </div>}
+            )}
+
 
             <div className='' style={{ background: `url(${banner}) no-repeat`, backgroundSize: 'cover', objectFit: 'cover' }}>
                 <div className=' flex justify-center items-center h-screen'>

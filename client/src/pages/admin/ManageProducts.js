@@ -74,8 +74,8 @@ const ManageProducts = () => {
         }).then(async (rs) => {
             if (rs.isConfirmed) {
                 const response = await apiDeleteProduct(pid);
-                if (response.success) toast.success(response.mes);
-                else toast.error(response.mes);
+                if (response.success) alert(response.mes);
+                else alert(response.mes);
                 render();
             }
         });
@@ -109,7 +109,7 @@ const ManageProducts = () => {
                     setEditProduct={setEditProduct}
                 />
             </div>}
-            {customizeVarriant && <div className='absolute inset-0 min-h-screen z-50 bg-[#e5e7eb]'>
+            {customizeVarriant && <div className='absolute  inset-0 min-h-screen z-50 bg-white'>
                 <CustomizeVarriants
                     customizeVarriant={customizeVarriant}
                     render={render}

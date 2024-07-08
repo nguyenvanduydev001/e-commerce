@@ -5,9 +5,9 @@
 
 ## Running projects *e-commerce*
 
-- `e-commerce\client>`
- -- `npm i`
- -- `npm start` for client
+1. `e-commerce\client>`
+ - `npm i`
+ - `npm start` for client
 
 - `e-commerce\server>`
 

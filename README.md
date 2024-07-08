@@ -8,7 +8,7 @@
 
 - `e-commerce\client>`
 
-## `e-commerce\server>`
+- `e-commerce\server>`
 
 ## Running projects *e-commerce*
 

@@ -4,10 +4,11 @@
 
 
 ## Running projects *e-commerce*
-`npm i`
+
 - `e-commerce\client>`
+`npm i`
 `npm start` for client
 
-- `e-commerce\server>`
+-`e-commerce\server>`
 
 `npm run dev` for server

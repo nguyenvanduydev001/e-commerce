@@ -4,13 +4,13 @@
 <br />
 <br />
 
-# cd to client and cd server
+## cd to client and cd server
 
-### `e-commerce\client>`
+- `e-commerce\client>`
 
-### `e-commerce\server>`
+## `e-commerce\server>`
 
-# Running projects *e-commerce*
+## Running projects *e-commerce*
 
 `npm i`
 

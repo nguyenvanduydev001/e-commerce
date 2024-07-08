@@ -1,17 +1,13 @@
 # Demo e-commerce
 
 ![Demo](/video//demo.gif)
-<br />
-<br />
+
 
 ## Running projects *e-commerce*
-
+`npm i`
 - `e-commerce\client>`
+`npm start` for client
 
 - `e-commerce\server>`
-
-`npm i`
-
-`npm start` for client
 
 `npm run dev` for server

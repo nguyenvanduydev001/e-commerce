@@ -7,8 +7,8 @@
 
 1 `e-commerce\client>`
  - `npm i`
- - `npm start` for client
+ - `npm start` 
 
 2 `e-commerce\server>`
 
-- `npm run dev` for server
+- `npm run dev` 

@@ -1,4 +1,4 @@
-# Demo
+# Demo e-commerce
 
 ![Demo](/video//demo.gif)
 <br />
@@ -10,10 +10,10 @@
 
 ### `e-commerce\server>`
 
-# Start
+# Running projects *e-commerce*
 
-### `npm i`
+`npm i`
 
-### `npm start` for client
+`npm start` for client
 
-### `npm run dev` for server
+`npm run dev` for server

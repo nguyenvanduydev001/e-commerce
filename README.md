@@ -4,10 +4,18 @@
 
 ## Running projects *e-commerce*
 
-I `e-commerce\client>`
+I. *e-commerce\client>*
 - `npm i`
 - `npm start` 
 
-II `e-commerce\server>`
+II. *e-commerce\server>*
 - `npm i`
 - `npm run dev` 
+  
+III. *Log in to your account*
+- User:
+  - user_4@gmail.com
+  - 123456
+- Admin:
+  - user_3@gmail.com
+  - 123456

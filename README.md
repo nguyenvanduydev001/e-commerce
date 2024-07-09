@@ -4,15 +4,15 @@
 
 ## Running projects *e-commerce*
 
-I. *e-commerce\client>*
+I. Cd e-commerce\client>
 - `npm i`
 - `npm start` 
 
-II. *e-commerce\server>*
+II.Cd e-commerce\server>
 - `npm i`
 - `npm run dev` 
   
-III. *Log in to your account*
+III.Log in to your account
 - User:
   - user_4@gmail.com
   - 123456

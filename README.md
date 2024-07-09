@@ -1,8 +1,6 @@
 # Demo e-commerce
 
-![Demo](/video//demo.gif)
-
-![Demo](/video/demo.png)
+![Demo](/review.png)
 
 ## Running projects *e-commerce*
 

@@ -1,19 +1,14 @@
-# Demo
+# Demo e-commerce
 
 ![Demo](/video//demo.gif)
-<br />
-<br />
 
-# cd to client and cd server
 
-### `e-commerce\client>`
+## Running projects *e-commerce*
 
-### `e-commerce\server>`
+I `e-commerce\client>`
+- `npm i`
+- `npm start` 
 
-# Start
-
-### `npm i`
-
-### `npm start` for client
-
-### `npm run dev` for server
+II `e-commerce\server>`
+- `npm i`
+- `npm run dev` 

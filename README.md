@@ -2,6 +2,7 @@
 
 ![Demo](/video//demo.gif)
 
+![Demo](/video/demo.png)
 
 ## Running projects *e-commerce*
 

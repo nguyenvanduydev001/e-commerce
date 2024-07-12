@@ -13,12 +13,18 @@ npm start
 ``` 
 
 II.Cd e-commerce\server>
-- `npm i`
-- `npm run dev` 
+```bash 
+npm i
+```
+```bash
+npm run dev
+``` 
   
 III.Log in to your account
 - User:
-  - user_4@gmail.com
+  ```bash 
+user_4@gmail.com
+```
   - 123456
 - Admin:
   - user_3@gmail.com

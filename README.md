@@ -21,11 +21,17 @@ npm run dev
 ``` 
   
 III.Log in to your account
-*User*
+User:
 ```bash 
 user_4@gmail.com
 ```
-  - 123456
-- Admin:
-  - user_3@gmail.com
-  - 123456
+```bash 
+123456
+```
+Admin:
+```bash
+ user_3@gmail.com
+```
+```bash 
+123456
+```

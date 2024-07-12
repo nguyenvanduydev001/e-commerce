@@ -5,7 +5,7 @@
 ## Running projects *e-commerce*
 
 I. Cd e-commerce\client>
-- `npm i`
+- ```bash npm i ```
 - `npm start` 
 
 II.Cd e-commerce\server>

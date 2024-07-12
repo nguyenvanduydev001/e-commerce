@@ -21,8 +21,8 @@ npm run dev
 ``` 
   
 III.Log in to your account
-- User:
-  ```bash 
+*User*
+```bash 
 user_4@gmail.com
 ```
   - 123456

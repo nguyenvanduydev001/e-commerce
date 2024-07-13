@@ -20,7 +20,8 @@ npm i
 npm run dev
 ``` 
   
-III.Log in to your account
+III.Log in to your account:
+
 User:
 ```bash 
 user_4@gmail.com
